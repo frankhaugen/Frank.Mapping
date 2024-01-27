@@ -34,4 +34,23 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMappingProvider, MappingProvider>();
         return services;
     }
+    
+    /// <summary>
+    /// Adds a mapping between types <typeparamref name="TFrom"/> and <typeparamref name="TTo"/>
+    /// using the provided function.
+    /// </summary>
+    /// <param name="services">The service collection to add the mapping to.</param>
+    /// <param name="map">The mapping function.</param>
+    /// <typeparam name="TFrom">The source type of the mapping.</typeparam>
+    /// <typeparam name="TTo">The destination type of the mapping.</typeparam>
+    /// <returns>The modified service collection with the mapping added.</returns>
+    public static IServiceCollection AddSimpleMapping<TFrom, TTo>(this IServiceCollection services, Func<TFrom, TTo> map) where TFrom : class where TTo : class
+    {
+        if (map is null)
+            throw new ArgumentNullException(nameof(map), "The mapping function cannot be null.");
+        
+        services.AddSingleton<IMappingDefinition<TFrom, TTo>>(new SimpleMapping<TFrom, TTo>(map));
+        services.AddSingleton<IMappingProvider, MappingProvider>();
+        return services;
+    }
 }
