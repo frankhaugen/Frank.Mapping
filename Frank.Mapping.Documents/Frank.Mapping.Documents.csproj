@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Map text documents to objects using XPath and JsonPath</Description>
+        <PackageTags>text, xpath, jsonpath, mapping, object, document, dependency, injection, ioc, container, inversion, control, xml, json</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JsonPath.Net" Version="1.1.0" />
+        <PackageReference Include="SafeFluentXPath.Implementation" Version="1.0.0" />
+    </ItemGroup>
+
+</Project>

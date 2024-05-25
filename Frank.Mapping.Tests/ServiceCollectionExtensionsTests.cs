@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests;
@@ -40,11 +41,11 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var mappingProvider = serviceProvider.GetService<IMappingProvider>();
-        Assert.NotNull(mappingProvider);
+        mappingProvider.Should().NotBeNull();
         
         var result = mappingProvider.Map<Version, string>(new Version(1, 2, 3, 4));
         _outputHelper.WriteLine(result);
-        Assert.Equal("1.2", result);
+        result.Should().Be("1.2");
     }
 
     [Fact]
