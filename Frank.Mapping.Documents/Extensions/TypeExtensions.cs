@@ -1,4 +1,4 @@
-﻿namespace Frank.Mapping.Documents;
+﻿namespace Frank.Mapping.Documents.Extensions;
 
 public static class TypeExtensions
 {

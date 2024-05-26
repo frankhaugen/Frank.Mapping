@@ -1,4 +1,8 @@
-﻿namespace Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents.Helpers;
+using Frank.Mapping.Documents.Models;
+using Frank.Mapping.Documents.Models.Enums;
+
+namespace Frank.Mapping.Documents;
 
 public class Document(string value)
 {
@@ -16,34 +20,42 @@ public class Document(string value)
             var value = valuePath.GetValue(Value);
             values.Add(new ValuePathResult(valuePath, value));
         }
+
         return values;
     }
-    
+
     public void MapTo<T>(T instance, IEnumerable<PropertyMapping> propertyMappings)
     {
         ArgumentNullException.ThrowIfNull(instance, nameof(instance));
-        foreach (var propertyMapping in propertyMappings)
-        {
-            propertyMapping.Map(Value, instance);
-        }
+        foreach (var propertyMapping in propertyMappings) propertyMapping.Map(Value, instance);
     }
-    
+
     public void MapTo<T>(T instance, DocumentMapping<T> documentMapping)
     {
         ArgumentNullException.ThrowIfNull(instance, nameof(instance));
         ArgumentNullException.ThrowIfNull(documentMapping, nameof(documentMapping));
-        
+
         if (documentMapping.DocumentVariant != DocumentVariant)
             throw new ArgumentException($"Document variant {DocumentVariant} does not match document mapping variant {documentMapping.DocumentVariant}");
-        
+
         MapTo(instance, documentMapping.PropertyMappings);
     }
-    
+
     public T MapTo<T>(DocumentMapping<T> documentMapping)
     {
         ArgumentNullException.ThrowIfNull(documentMapping, nameof(documentMapping));
         var instance = Activator.CreateInstance<T>();
         MapTo(instance, documentMapping.PropertyMappings);
         return instance;
+    }
+
+    public IEnumerable<string> GetPaths()
+    {
+        return DocumentVariant switch
+        {
+            DocumentVariant.Json => JsonPathHelper.GetPaths(Value),
+            DocumentVariant.Xml => XPathHelper.GetPaths(Value),
+            _ => throw new NotImplementedException($"Document variant {DocumentVariant} is not implemented.")
+        };
     }
 }

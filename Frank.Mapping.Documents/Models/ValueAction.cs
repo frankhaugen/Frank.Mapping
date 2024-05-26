@@ -1,4 +1,4 @@
-﻿namespace Frank.Mapping.Documents;
+﻿namespace Frank.Mapping.Documents.Models;
 
 public class ValueAction(ValuePath valuePath, Action<object?> action)
 {

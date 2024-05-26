@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Frank.Mapping.Documents;
+namespace Frank.Mapping.Documents.Models;
 
 [DebuggerDisplay("{GetPath} => {Value}")]
 public class ValuePathResult(ValuePath valuePath, object? value)

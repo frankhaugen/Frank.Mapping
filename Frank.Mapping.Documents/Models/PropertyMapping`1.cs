@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Frank.Mapping.Documents;
+namespace Frank.Mapping.Documents.Models;
 
 public class PropertyMapping<T, TProp> : PropertyMapping
 {

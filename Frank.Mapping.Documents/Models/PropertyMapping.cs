@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
+using Frank.Mapping.Documents.Extensions;
 
-namespace Frank.Mapping.Documents;
+namespace Frank.Mapping.Documents.Models;
 
 public class PropertyMapping
 {

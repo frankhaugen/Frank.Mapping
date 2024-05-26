@@ -1,4 +1,4 @@
-﻿namespace Frank.Mapping.Documents;
+﻿namespace Frank.Mapping.Documents.Helpers;
 
 public class ThrowHelper
 {

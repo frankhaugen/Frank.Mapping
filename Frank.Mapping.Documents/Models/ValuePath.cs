@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Xml;
+using Frank.Mapping.Documents.Models.Enums;
 using Json.More;
 using Json.Path;
 
-namespace Frank.Mapping.Documents;
+namespace Frank.Mapping.Documents.Models;
 
 [DebuggerDisplay("{DocumentVariant} - {Path} - {ValueType}")]
 public class ValuePath

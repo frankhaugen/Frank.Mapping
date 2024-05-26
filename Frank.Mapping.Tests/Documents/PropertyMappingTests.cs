@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using Frank.Mapping.Documents;
+using Frank.Mapping.Documents.Models;
+using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;

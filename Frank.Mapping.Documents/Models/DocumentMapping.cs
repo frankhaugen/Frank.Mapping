@@ -1,4 +1,6 @@
-﻿namespace Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents.Models.Enums;
+
+namespace Frank.Mapping.Documents.Models;
 
 public class DocumentMapping(Type documentType, DocumentVariant documentVariant, IReadOnlyList<PropertyMapping> propertyMappings)
 {

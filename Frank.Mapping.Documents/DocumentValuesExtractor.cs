@@ -1,4 +1,7 @@
-﻿namespace Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents.Helpers;
+using Frank.Mapping.Documents.Models;
+
+namespace Frank.Mapping.Documents;
 
 public class DocumentValuesExtractor(List<ValuePath> valuePaths)
 {
