@@ -1,6 +1,8 @@
-﻿namespace Frank.Mapping.Documents.Nlp;
+﻿using Frank.Mapping.Documents.Models.Enums;
 
-public static class Ngram
+namespace Frank.Mapping.Documents.Helpers;
+
+public static class NgramHelper
 {
     public static double Compare(string text1, string text2, Size parseSize = Size.Tri)
     {

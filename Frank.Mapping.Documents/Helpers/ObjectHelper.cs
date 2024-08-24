@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Frank.Mapping.Documents.Path;
+using Microsoft.Extensions.Configuration;
 
 namespace Frank.Mapping.Documents.Helpers;
 
@@ -15,7 +16,7 @@ public static class ObjectHelper
         return instance;
     }
     
-    public static void AssignValues<T>(T instance, IDictionary<string, string?> data)
+    private static void AssignValues<T>(T instance, IDictionary<string, string?> data)
     {
         ArgumentNullException.ThrowIfNull(instance);
         ArgumentNullException.ThrowIfNull(data);

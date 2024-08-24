@@ -59,4 +59,31 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
         Assert.Throws<ArgumentNullException>(() => services.AddSimpleMapping<Version, string>(map));
     }
     
+    [Fact]
+    public async Task AddAsyncMappingDefinition_ShouldAddMappingDefinitionToServices()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        Func<Version, string> map = version => version.ToString(2);
+
+        // Act
+        services.AddAsyncMappingDefinition<Version, string, AsyncMapping>();
+
+        // Assert
+        var serviceProvider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
+        var mappingDefinition = serviceProvider.GetService<IAsyncMappingDefinition<Version, string>>();
+        Assert.NotNull(mappingDefinition);
+        
+        var result = await mappingDefinition.MapAsync(new Version(1, 2, 3, 4));
+        _outputHelper.WriteLine(result);
+        Assert.Equal("1.2", result);
+    }
+
+    public class AsyncMapping : IAsyncMappingDefinition<Version, string>
+    {
+        public Task<string> MapAsync(Version source)
+        {
+            return Task.FromResult(source.ToString(2));
+        }
+    }
 }

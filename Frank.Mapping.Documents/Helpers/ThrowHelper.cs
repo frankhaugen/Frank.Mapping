@@ -9,11 +9,6 @@ public class ThrowHelper
     
     public static void ThrowIfNullOrWhiteSpace(string value, string parameterName)
     {
-        Throw(value, parameterName);
-    }
-
-    private static void Throw(string value, string parameterName)
-    {
         if (string.IsNullOrWhiteSpace(value))
             Throw(new ArgumentException($"'{parameterName}' cannot be null or whitespace."));
     }

@@ -5,7 +5,6 @@ namespace Frank.Mapping.Documents.Helpers;
 
 public static class JsonPathHelper
 {
-    
     public static IEnumerable<string> GetPaths(string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));

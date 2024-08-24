@@ -1,4 +1,4 @@
-﻿namespace Frank.Mapping.Documents.Nlp;
+﻿namespace Frank.Mapping.Documents.Models.Enums;
 
 public enum Size : int
 {

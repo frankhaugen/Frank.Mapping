@@ -16,7 +16,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMappingDefinition<TFrom, TTo, TMapping>(this IServiceCollection services) where TMapping : class, IMappingDefinition<TFrom, TTo>
     {
         services.AddSingleton<IMappingDefinition<TFrom, TTo>, TMapping>();
-        services.AddSingleton<IMappingProvider, MappingProvider>();
+        if (services.All(x => x.ServiceType != typeof(IMappingProvider)))
+            services.AddSingleton<IMappingProvider, MappingProvider>();
         return services;
     }
 
@@ -31,7 +32,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAsyncMappingDefinition<TFrom, TTo, TMapping>(this IServiceCollection services) where TMapping : class, IAsyncMappingDefinition<TFrom, TTo>
     {
         services.AddSingleton<IAsyncMappingDefinition<TFrom, TTo>, TMapping>();
-        services.AddSingleton<IMappingProvider, MappingProvider>();
+        if (services.All(x => x.ServiceType != typeof(IMappingProvider)))
+            services.AddSingleton<IMappingProvider, MappingProvider>();
         return services;
     }
     
@@ -50,7 +52,8 @@ public static class ServiceCollectionExtensions
             throw new ArgumentNullException(nameof(map), "The mapping function cannot be null.");
         
         services.AddSingleton<IMappingDefinition<TFrom, TTo>>(new SimpleMapping<TFrom, TTo>(map));
-        services.AddSingleton<IMappingProvider, MappingProvider>();
+        if (services.All(x => x.ServiceType != typeof(IMappingProvider)))
+            services.AddSingleton<IMappingProvider, MappingProvider>();
         return services;
     }
 }

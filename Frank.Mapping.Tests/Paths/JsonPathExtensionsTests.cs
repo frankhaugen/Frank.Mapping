@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using FluentAssertions;
 using Frank.Mapping.Documents;
+using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Documents.Models;
 using Xunit.Abstractions;
 
@@ -24,7 +25,7 @@ public class JsonPathExtensionsTests
         Expression<Func<SampleClass, object>> expression = x => x.Name;
         
         // Act
-        var jsonPath = expression.GetPathDefinition();
+        var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
         jsonPath.Path.Should().Be("$.Name");
@@ -38,7 +39,7 @@ public class JsonPathExtensionsTests
         Expression<Func<SampleClass, int>> expression = x => x.Age;
         
         // Act
-        var jsonPath = expression.GetPathDefinition();
+        var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
         jsonPath.Path.Should().Be("$.Age");
@@ -52,7 +53,7 @@ public class JsonPathExtensionsTests
         Expression<Func<SampleClass, string?>> expression = x => x.Address.City;
         
         // Act
-        var jsonPath = expression.GetPathDefinition();
+        var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
         jsonPath.Path.Should().Be("$.Address.City");
@@ -78,7 +79,7 @@ public class JsonPathExtensionsTests
         var jsonRoot = JsonNode.Parse(JsonSerializer.SerializeToUtf8Bytes(model));
         
         // Act
-        var jsonPath = expression.GetJsonPath();
+        var jsonPath = expression.GetJsonPathDefinition().JsonPath;
         var evalResult = jsonPath.Evaluate(jsonRoot);
         var result = evalResult.Matches!.Select(x => x.Value!.GetValue<string>()).First();
         
