@@ -38,6 +38,11 @@ public class MappingCodeFixProvider : CodeFixProvider
         var sourceTypeSyntax = methodDeclaration.ParameterList.Parameters[0].Type;
         var targetTypeSyntax = methodDeclaration.ReturnType;
         
+        if (targetTypeSyntax is GenericNameSyntax genericNameSyntax)
+        {
+            targetTypeSyntax = genericNameSyntax.TypeArgumentList.Arguments[0];
+        }
+        
         var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
         var sourceType = semanticModel.GetSymbolInfo(sourceTypeSyntax ?? throw new InvalidOperationException()).Symbol as ITypeSymbol;
         var targetType = semanticModel.GetSymbolInfo(targetTypeSyntax).Symbol as ITypeSymbol;

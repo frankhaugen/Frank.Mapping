@@ -29,7 +29,7 @@ public class MappingAnalyzer : DiagnosticAnalyzer
         var methodDeclaration = (Microsoft.CodeAnalysis.CSharp.Syntax.MethodDeclarationSyntax)context.Node;
 
         // Detect incomplete Map methods and raise diagnostic
-        if (methodDeclaration.Identifier.Text == "Map" && methodDeclaration.ParameterList.Parameters.Count == 1 && methodDeclaration.Body?.Statements.Count == 0)
+        if ((methodDeclaration.Identifier.Text == "Map" || methodDeclaration.Identifier.Text == "MapAsync") && methodDeclaration.ParameterList.Parameters.Count == 1 && methodDeclaration.Body?.Statements.Count == 0)
         {
             // Perform further checks here (e.g., validate the method body)
             var diagnostic = Diagnostic.Create(Rule, methodDeclaration.GetLocation(), "SourceType", "TargetType");
