@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <IsTestProject>true</IsTestProject>
         <InvariantGlobalization>true</InvariantGlobalization>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
