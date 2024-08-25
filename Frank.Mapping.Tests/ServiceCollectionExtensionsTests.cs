@@ -64,7 +64,6 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
     {
         // Arrange
         var services = new ServiceCollection();
-        Func<Version, string> map = version => version.ToString(2);
 
         // Act
         services.AddAsyncMappingDefinition<Version, string, AsyncMapping>();

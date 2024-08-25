@@ -3,9 +3,18 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <LineEnding>LF</LineEnding>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzer.Testing" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.XUnit" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="1.1.2" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.32.0">
       <PrivateAssets>all</PrivateAssets>
@@ -15,6 +24,8 @@
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="RoslynQuoter" Version="1.0.1" />
+    
     <PackageReference Include="xunit" Version="2.8.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,8 +38,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Frank.Mapping.Analyzers\Frank.Mapping.Analyzers.csproj" />
     <ProjectReference Include="..\Frank.Mapping.Documents\Frank.Mapping.Documents.csproj" />
+    <ProjectReference Include="..\Frank.Mapping.Tests.Common\Frank.Mapping.Tests.Common.csproj" />
     <ProjectReference Include="..\Frank.Mapping\Frank.Mapping.csproj" />
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <Compile Update="**\*.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="CodeGeneration\SyntaxHelperTests.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
 </Project>

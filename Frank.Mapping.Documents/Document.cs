@@ -51,11 +51,12 @@ public class Document(string value)
 
     public IEnumerable<string> GetPaths()
     {
+#pragma warning disable CS8524
         return DocumentVariant switch
         {
             DocumentVariant.Json => JsonPathHelper.GetPaths(Value),
-            DocumentVariant.Xml => XPathHelper.GetPaths(Value),
-            _ => throw new NotImplementedException($"Document variant {DocumentVariant} is not implemented.")
+            DocumentVariant.Xml => XPathHelper.GetPaths(Value)
         };
+#pragma warning restore CS8524
     }
 }

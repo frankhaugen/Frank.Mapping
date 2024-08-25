@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using FluentAssertions;
@@ -92,6 +93,7 @@ public class JsonPathExtensionsTests
     }
 
     // Sample class for testing
+    [ExcludeFromCodeCoverage]
     private class SampleClass
     {
         public string Name { get; set; }
@@ -102,6 +104,7 @@ public class JsonPathExtensionsTests
         public Address[] Addresses { get; set; } = [];
     }
 
+    [ExcludeFromCodeCoverage]
     private class Address
     {
         public string Street { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using FluentAssertions;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Tests.Documents;
@@ -119,6 +120,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         configPathDefinition.Path.Should().Be("NestedDocument:StringProperty");
     }
     
+    [ExcludeFromCodeCoverage]
     private class SimpleDocument
     {
         public string StringProperty { get; set; }
@@ -126,6 +128,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         public NestedDocument NestedDocument { get; set; }
     }
     
+    [ExcludeFromCodeCoverage]
     private class NestedDocument
     {
         public List<string> StringList { get; set; }

@@ -1,4 +1,5 @@
-﻿using Xunit.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
@@ -33,6 +34,7 @@ public abstract class DocumentsTestBase
         </Person>
         """;
     
+    [ExcludeFromCodeCoverage]
     public class Person
     {
         public string Name { get; set; }
@@ -41,6 +43,7 @@ public abstract class DocumentsTestBase
         public Address Address { get; set; }
     }
     
+    [ExcludeFromCodeCoverage]
     public class Address
     {
         public string? Street { get; set; }

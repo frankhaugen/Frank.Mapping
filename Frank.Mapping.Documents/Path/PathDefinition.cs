@@ -1,5 +1,8 @@
-﻿namespace Frank.Mapping.Documents.Path;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Frank.Mapping.Documents.Path;
+
+[ExcludeFromCodeCoverage]
 public abstract record PathDefinition : IPathDefinition
 {
     public string Path { get; }
@@ -10,8 +13,10 @@ public abstract record PathDefinition : IPathDefinition
         Path = path;
     }
     
+    [ExcludeFromCodeCoverage]
     public override string ToString() => Path;
-    
+
+    [ExcludeFromCodeCoverage]
     public static implicit operator string(PathDefinition pathDefinition) => pathDefinition.Path;
     
     public static T? Create<T>(string path) where T : PathDefinition => Activator.CreateInstance(typeof(T), path) as T;

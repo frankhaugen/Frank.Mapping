@@ -27,19 +27,28 @@ public static class JsonPathHelper
 
     private static void ExtractAllJsonPaths(JsonElement jsonRootElement, string empty, List<string> paths)
     {
-        switch (jsonRootElement.ValueKind)
+        // Extract all JSON paths from the JSON document. JSON paths are used to map JSON properties to C# properties. The syntax is similar to XPath for XML, example: $.Name or $.Address.City, or $.[0].Name or $.[0].Address.City, or $.Address[0].City.
+        // The method is recursive and will traverse all JSON elements in the JSON document.
+        // The method is called by the GetPaths method in the JsonPathHelper class.
+        // The method is called by the ExtractAllJsonPaths method in the JsonPathHelper class.
+        
+        if (jsonRootElement.ValueKind == JsonValueKind.Object)
         {
-            case JsonValueKind.Object:
-                foreach (var property in jsonRootElement.EnumerateObject())
-                    ExtractAllJsonPaths(property.Value, $"{empty}/{property.Name}", paths);
-                break;
-            case JsonValueKind.Array:
-                for (var i = 0; i < jsonRootElement.GetArrayLength(); i++)
-                    ExtractAllJsonPaths(jsonRootElement[i], $"{empty}/{i}", paths);
-                break;
-            default:
-                paths.Add(empty);
-                break;
+            foreach (var property in jsonRootElement.EnumerateObject())
+            {
+                var path = $"{empty}.{property.Name}";
+                paths.Add($"${path}");
+                ExtractAllJsonPaths(property.Value, path, paths);
+            }
+        }
+        else if (jsonRootElement.ValueKind == JsonValueKind.Array)
+        {
+            for (var i = 0; i < jsonRootElement.GetArrayLength(); i++)
+            {
+                var path = "{empty}[{i}]";
+                paths.Add($"${path}");
+                ExtractAllJsonPaths(jsonRootElement[i], path, paths);
+            }
         }
     }
 }
