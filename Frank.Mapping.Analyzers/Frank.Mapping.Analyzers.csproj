@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
         <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
+        <!-- Release-tracking table format differs across Microsoft.CodeAnalysis.Analyzers versions; keep shipped docs for humans. -->
+        <NoWarn>$(NoWarn);RS2007</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

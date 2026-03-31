@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Frank.Mapping.Documents.Path;
 using Json.More;
 
@@ -17,10 +17,6 @@ public static class JsonPathDefinitionExtensions
         var jsonPath = jsonPathDefinition.JsonPath;
         var jsonDocument = JsonSerializer.SerializeToDocument(instance);
         var result = jsonPath.Evaluate(jsonDocument.RootElement.AsNode());
-        
-        if (result.Error != null)
-            throw new InvalidOperationException($"Failed to evaluate path: {jsonPathDefinition} with errors: {result.Error}");
-        
         var matches = result.Matches;
         
         if (matches == null)

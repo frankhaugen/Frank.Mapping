@@ -65,7 +65,7 @@ public static class SyntaxHelper
     private static ExpressionSyntax GenerateMappingExpression(IPropertySymbol sourceProperty, IPropertySymbol targetProperty, string sourceRootIdentifier)
     {
         // Handle direct mapping when the types are the same
-        if (sourceProperty.Type.Equals(targetProperty.Type))
+        if (SymbolEqualityComparer.Default.Equals(sourceProperty.Type, targetProperty.Type))
         {
             return SyntaxFactory.MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,

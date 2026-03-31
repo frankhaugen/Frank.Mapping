@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Xml;
 using Frank.Mapping.Documents.Models.Enums;
@@ -37,10 +37,6 @@ public class ValuePath<T>(DocumentVariant documentVariant, string path) : ValueP
         var jsonPath = JsonPath.Parse(Path);
         var jsonDocument = JsonDocument.Parse(document);
         var result = jsonPath.Evaluate(jsonDocument.RootElement.AsNode());
-        
-        if (result.Error != null)
-            throw new InvalidOperationException($"Failed to evaluate path: {Path} with errors: {result.Error}");
-        
         var matches = result.Matches;
         
         if (matches == null)

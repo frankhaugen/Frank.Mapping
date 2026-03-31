@@ -2,6 +2,6 @@
 
 ### New Rules
 
-| Rule ID   | Category | Severity | Notes                            |
-|-----------|----------|----------|----------------------------------|
-| MAP1001   | Usage    | Info     | Generate mapping code            |
+| Rule ID | Category | Severity | Notes                                            |
+|---------|----------|----------|--------------------------------------------------|
+| MAP1001 | Usage    | Info     | Generate mapping code                            |
