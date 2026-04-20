@@ -5,10 +5,37 @@ on:
     types: [published]
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  release_job:
-    name: Release Job
-    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
-    uses: frankhaugen/Workflows/.github/workflows/dotnet-publish-on-release.yml@main
-    secrets: inherit
-    
+  publish:
+    name: Publish to NuGet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Set version from release tag
+        id: version
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          echo "version=${VERSION:-0.0.0-dev}" >> $GITHUB_OUTPUT
+
+      - name: Restore
+        run: dotnet restore Frank.Mapping.slnx
+
+      - name: Build
+        run: dotnet build Frank.Mapping.slnx --configuration Release --no-restore
+
+      - name: Pack
+        run: dotnet pack Frank.Mapping.slnx --configuration Release --no-build --output ./nupkgs -p:Version=${{ steps.version.outputs.version }}
+
+      - name: Push to NuGet.org
+        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key oidc --skip-duplicate
+
