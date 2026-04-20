@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Helpers;
+﻿using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
 
@@ -26,7 +25,7 @@ public class NgramTests
         var result = NgramHelper.Compare(text1, text2);
         
         // Assert
-        result.Should().BeApproximately(1.0, 0.01);
+        Assert.InRange(result, 0.99, 1.01);
         _outputHelper.WriteLine($"Test Result: {result}");
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using FluentAssertions;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
@@ -26,7 +25,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var memberName = expression.GetPropertyInfo().Name;
         
         // Assert
-        memberName.Should().Be(nameof(SimpleDocument.StringProperty));
+        Assert.Equal(nameof(SimpleDocument.StringProperty), memberName);
     }
     
     [Fact]
@@ -39,7 +38,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var memberName = expression.GetPropertyInfo().Name;
         
         // Assert
-        memberName.Should().Be(nameof(SimpleDocument.NestedDocument.StringProperty));
+        Assert.Equal(nameof(SimpleDocument.NestedDocument.StringProperty), memberName);
     }
     
     [Fact]
@@ -52,7 +51,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var xPathDefinition = expression.GetXPathDefinition();
         
         // Assert
-        xPathDefinition.Path.Should().Be("/StringProperty");
+        Assert.Equal("/StringProperty", xPathDefinition.Path);
     }
     
     [Fact]
@@ -65,7 +64,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var xPathDefinition = expression.GetXPathDefinition();
         
         // Assert
-        xPathDefinition.Path.Should().Be("/NestedDocument/StringProperty");
+        Assert.Equal("/NestedDocument/StringProperty", xPathDefinition.Path);
     }
     
     [Fact]
@@ -78,7 +77,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var jsonPathDefinition = expression.GetJsonPathDefinition();
         
         // Assert
-        jsonPathDefinition.Path.Should().Be("$.StringProperty");
+        Assert.Equal("$.StringProperty", jsonPathDefinition.Path);
     }
     
     [Fact]
@@ -91,7 +90,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var jsonPathDefinition = expression.GetJsonPathDefinition();
         
         // Assert
-        jsonPathDefinition.Path.Should().Be("$.NestedDocument.StringProperty");
+        Assert.Equal("$.NestedDocument.StringProperty", jsonPathDefinition.Path);
     }
     
     [Fact]
@@ -104,7 +103,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var configPathDefinition = expression.GetConfigPathDefinition();
         
         // Assert
-        configPathDefinition.Path.Should().Be("StringProperty");
+        Assert.Equal("StringProperty", configPathDefinition.Path);
     }
     
     [Fact]
@@ -117,7 +116,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var configPathDefinition = expression.GetConfigPathDefinition();
         
         // Assert
-        configPathDefinition.Path.Should().Be("NestedDocument:StringProperty");
+        Assert.Equal("NestedDocument:StringProperty", configPathDefinition.Path);
     }
     
     [ExcludeFromCodeCoverage]

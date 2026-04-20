@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
@@ -26,10 +25,10 @@ public class ValuePathTests : DocumentsTestBase
         var valuePath = new ValuePath<string>(documentVariant, path);
 
         // Assert
-        valuePath.DocumentVariant.Should().Be(documentVariant);
-        valuePath.Path.Should().Be(path);
-        valuePath.ValueType.Should().Be(type);
-        valuePath.GetValue(jsonDocument).Should().Be("John Doe");
+        Assert.Equal(documentVariant, valuePath.DocumentVariant);
+        Assert.Equal(path, valuePath.Path);
+        Assert.Equal(type, valuePath.ValueType);
+        Assert.Equal("John Doe", valuePath.GetValue(jsonDocument));
     }
     
     [Fact]
@@ -45,9 +44,9 @@ public class ValuePathTests : DocumentsTestBase
         var valuePath = new ValuePath(documentVariant, path, type);
 
         // Assert
-        valuePath.DocumentVariant.Should().Be(documentVariant);
-        valuePath.Path.Should().Be(path);
-        valuePath.ValueType.Should().Be(type);
-        valuePath.GetValue(jsonDocument).Should().Be("John Doe");
+        Assert.Equal(documentVariant, valuePath.DocumentVariant);
+        Assert.Equal(path, valuePath.Path);
+        Assert.Equal(type, valuePath.ValueType);
+        Assert.Equal("John Doe", valuePath.GetValue(jsonDocument));
     }
 }

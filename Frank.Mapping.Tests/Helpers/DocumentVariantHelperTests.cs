@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Helpers;
+﻿using Frank.Mapping.Documents.Helpers;
 using Frank.Mapping.Documents.Models.Enums;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
@@ -26,7 +25,7 @@ public class DocumentVariantHelperTests
         var result = DocumentVariantHelper.GetDocumentVariant(document);
         
         // Assert
-        result.Should().Be(DocumentVariant.Xml);
+        Assert.Equal(DocumentVariant.Xml, result);
         _output.WriteLine($"Test Result: {result}");
     }
     
@@ -40,7 +39,7 @@ public class DocumentVariantHelperTests
         var result = DocumentVariantHelper.GetDocumentVariant(document);
         
         // Assert
-        result.Should().Be(DocumentVariant.Json);
+        Assert.Equal(DocumentVariant.Json, result);
         _output.WriteLine($"Test Result: {result}");
     }
     

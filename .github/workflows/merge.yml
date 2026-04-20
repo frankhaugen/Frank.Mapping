@@ -22,31 +22,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determine next major version
-        id: version
+      - name: Determine next major version and create release
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const releases = await github.rest.repos.listReleases({
+            let nextTag = 'v1.0.0';
+            try {
+              const { data: releases } = await github.rest.repos.listReleases({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 1
+              });
+              if (releases.length > 0) {
+                const tag = releases[0].tag_name.replace(/^v/, '');
+                const major = parseInt(tag.split('.')[0]) + 1;
+                nextTag = `v${major}.0.0`;
+              }
+            } catch (_) {}
+            await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              per_page: 1
-            });
-            if (releases.data.length === 0) return 'v1.0.0';
-            const tag = releases.data[0].tag_name.replace(/^v/, '');
-            const major = parseInt(tag.split('.')[0]) + 1;
-            return `v${major}.0.0`;
-          result-encoding: string
-
-      - name: Create GitHub Release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.releases.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: '${{ steps.version.outputs.result }}',
-              name: 'Release ${{ steps.version.outputs.result }}',
+              tag_name: nextTag,
+              name: `Release ${nextTag}`,
               draft: false,
               prerelease: false,
               generate_release_notes: true

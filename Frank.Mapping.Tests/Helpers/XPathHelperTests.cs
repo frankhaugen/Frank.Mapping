@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Helpers;
+﻿using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
 
@@ -38,7 +37,7 @@ public class XPathHelperTests
         var result = XPathHelper.GetPaths(xml).ToArray();
         
         // Assert
-        result.Should().NotBeNull();
+        Assert.NotNull(result);
         _outputHelper.WriteLine($"Test Result:");
         _outputHelper.WriteLine(result);
     }

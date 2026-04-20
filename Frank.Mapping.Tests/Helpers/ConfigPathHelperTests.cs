@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using FluentAssertions;
 using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
@@ -30,7 +29,7 @@ public class ConfigPathHelperTests
         var result = ConfigPathHelper.GetPaths(configJsonContent).ToArray();
         
         // Assert
-        result.Should().NotBeNullOrEmpty();
+        Assert.False(string.IsNullOrEmpty(result.FirstOrDefault()));
         _output.WriteLine($"Test Result:");
         _output.WriteLine(result);
     }

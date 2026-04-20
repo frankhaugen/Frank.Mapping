@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Common.TestingInfrastructure;
@@ -28,7 +27,7 @@ public class JsonPathDefinitionExtensionsTests : DocumentsTestBase
         
         // Assert
         _outputHelper.WriteLine(result);
-        result.Should().BeEquivalentTo(new MyPath(jsonPath));
+        Assert.Equivalent(new MyPath(jsonPath), result);
         
         var myType = new TestSourceClass()
         {
@@ -55,13 +54,13 @@ public class JsonPathDefinitionExtensionsTests : DocumentsTestBase
         
         var value = result.GetValue(myType);
         _outputHelper.WriteLine(value);
-        value.Should().Be("123456");
+        Assert.Equal("123456", value);
         
         var genericValue = result.GetValue<string>(myType);
         _outputHelper.WriteLine(genericValue);
-        genericValue.Should().Be("123456");
+        Assert.Equal("123456", genericValue);
         
-        value.Should().Be(genericValue);
+        Assert.Equal(genericValue, value);
     }
 }
 

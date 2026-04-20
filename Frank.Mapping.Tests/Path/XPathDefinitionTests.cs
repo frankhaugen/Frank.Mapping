@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Path;
+﻿using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
@@ -24,7 +23,7 @@ public class XPathDefinitionTest : DocumentsTestBase
         var definition = new XPathDefinition(path);
         
         // Assert
-        definition.Path.Should().Be(path);
+        Assert.Equal(path, definition.Path);
     }
     
     [Fact]
@@ -37,6 +36,7 @@ public class XPathDefinitionTest : DocumentsTestBase
         Action act = () => new XPathDefinition(path);
         
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage($"The provided XPath '{path}' is invalid. (Parameter 'path')");
+        var ex = Assert.Throws<ArgumentException>(act);
+        Assert.Equal($"The provided XPath '{path}' is invalid. (Parameter 'path')", ex.Message);
     }
 }

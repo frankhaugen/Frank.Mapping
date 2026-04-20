@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
@@ -31,8 +30,8 @@ public class DocumentValuesExtractorTests : DocumentsTestBase
         var values = documentValuesExtractor.ExtractValuesFromDocument(jsonDocument).ToList();
 
         // Assert
-        values.Should().NotBeNull();
-        values.Should().HaveCount(4);
+        Assert.NotNull(values);
+        Assert.Equal(4, values.Count);
         
         _outputHelper.WriteLine(values.Select(x => x.ToString()));
     }
@@ -55,8 +54,8 @@ public class DocumentValuesExtractorTests : DocumentsTestBase
         var values = documentValuesExtractor.ExtractValuesFromDocument(xmlDocument).ToList();
 
         // Assert
-        values.Should().NotBeNull();
-        values.Should().HaveCount(4);
+        Assert.NotNull(values);
+        Assert.Equal(4, values.Count);
         
         _outputHelper.WriteLine(values.Select(x => x.ToString()));
     }

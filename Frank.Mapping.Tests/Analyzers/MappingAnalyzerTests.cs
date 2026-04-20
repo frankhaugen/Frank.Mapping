@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Reflection;
-using FluentAssertions;
 using Frank.Mapping.Analyzers;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;

@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using FluentAssertions;
 using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Documents.Models;
@@ -29,7 +28,7 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        jsonPath.Path.Should().Be("$.Name");
+        Assert.Equal("$.Name", jsonPath.Path);
         _output.WriteLine($"Test Result: {jsonPath.Path}");
     }
 
@@ -43,7 +42,7 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        jsonPath.Path.Should().Be("$.Age");
+        Assert.Equal("$.Age", jsonPath.Path);
         _output.WriteLine($"Test Result: {jsonPath.Path}");
     }
     
@@ -57,7 +56,7 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        jsonPath.Path.Should().Be("$.Address.City");
+        Assert.Equal("$.Address.City", jsonPath.Path);
         _output.WriteLine($"Test Result: {jsonPath.Path}");
     }
     
@@ -88,8 +87,8 @@ public class JsonPathExtensionsTests
         _output.WriteLine($"Expression: {expression}");
         _output.WriteLine($"Test Result: {jsonPath}");
         _output.WriteLine(result);
-        jsonPath.ToString().Should().Be("$.Addresses[0].City");
-        result.Should().Be("New York");
+        Assert.Equal("$.Addresses[0].City", jsonPath.ToString());
+        Assert.Equal("New York", result);
     }
 
     // Sample class for testing

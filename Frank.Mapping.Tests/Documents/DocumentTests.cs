@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
@@ -31,8 +30,8 @@ public class DocumentTests : DocumentsTestBase
         
         document.MapTo<Person>(person, documentMapping);
 
-        person.Name.Should().Be("John Doe");
-        person.Age.Should().Be(30);
+        Assert.Equal("John Doe", person.Name);
+        Assert.Equal(30, person.Age);
     }
     
     [Fact]
@@ -53,8 +52,8 @@ public class DocumentTests : DocumentsTestBase
 
         document.MapTo<Person>(person, documentMapping);
 
-        person.Name.Should().Be("John Doe");
-        person.Age.Should().Be(30);
+        Assert.Equal("John Doe", person.Name);
+        Assert.Equal(30, person.Age);
     }
     
     [Fact]
@@ -69,8 +68,8 @@ public class DocumentTests : DocumentsTestBase
 
         var values = document.ExtractValues(valuePaths).ToList();
 
-        values[0].Value.Should().Be("John Doe");
-        values[1].Value.Should().Be(30);
+        Assert.Equal("John Doe", values[0].Value);
+        Assert.Equal(30, Convert.ToInt32(values[1].Value));
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlValuePaths = new List<ValuePath>()
@@ -81,14 +80,14 @@ public class DocumentTests : DocumentsTestBase
         
         var xmlValues = xmlDocument.ExtractValues(xmlValuePaths).ToList();
         
-        xmlValues[0].Value.Should().Be("John Doe");
-        xmlValues[1].Value.Should().Be(30);
+        Assert.Equal("John Doe", xmlValues[0].Value);
+        Assert.Equal(30, Convert.ToInt32(xmlValues[1].Value));
         
-        values[0].Value.Should().NotBe("/Person/Name");
-        values[1].Value.Should().NotBe("/Person/age");
+        Assert.NotEqual("/Person/Name", values[0].Value);
+        Assert.NotEqual("/Person/age", values[1].Value);
         
-        xmlValues[0].Value.Should().NotBe("$.Name");
-        xmlValues[1].Value.Should().NotBe("$.age");
+        Assert.NotEqual("$.Name", xmlValues[0].Value);
+        Assert.NotEqual("$.age", xmlValues[1].Value);
         
         Assert.Throws<ArgumentException>(() => document.ExtractValues(new List<ValuePath>()
         {
@@ -109,24 +108,24 @@ public class DocumentTests : DocumentsTestBase
         var jsonDocument = new Document(_jsonDocument);
         var jsonPaths = jsonDocument.GetPaths().ToList();
 
-        jsonPaths.Should().Contain("$.Name");
-        jsonPaths.Should().Contain("$.age");
-        jsonPaths.Should().Contain("$.Address.City");
+        Assert.Contains("$.Name", jsonPaths);
+        Assert.Contains("$.age", jsonPaths);
+        Assert.Contains("$.Address.City", jsonPaths);
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlPaths = xmlDocument.GetPaths().ToList();
         
-        xmlPaths.Should().Contain("/Person/Name");
-        xmlPaths.Should().Contain("/Person/age");
-        xmlPaths.Should().Contain("/Person/Address/City");
+        Assert.Contains("/Person/Name", xmlPaths);
+        Assert.Contains("/Person/age", xmlPaths);
+        Assert.Contains("/Person/Address/City", xmlPaths);
         
-        jsonPaths.Should().NotContain("/Person/Name");
-        jsonPaths.Should().NotContain("/Person/age");
-        jsonPaths.Should().NotContain("/Person/Address/City");
+        Assert.DoesNotContain("/Person/Name", jsonPaths);
+        Assert.DoesNotContain("/Person/age", jsonPaths);
+        Assert.DoesNotContain("/Person/Address/City", jsonPaths);
         
-        xmlPaths.Should().NotContain("$.Name");
-        xmlPaths.Should().NotContain("$.age");
-        xmlPaths.Should().NotContain("$.Address.City");
+        Assert.DoesNotContain("$.Name", xmlPaths);
+        Assert.DoesNotContain("$.age", xmlPaths);
+        Assert.DoesNotContain("$.Address.City", xmlPaths);
         
         Assert.Throws<ArgumentException>(() => new Document("Invalid document"));
     }
@@ -144,8 +143,8 @@ public class DocumentTests : DocumentsTestBase
 
         document.MapTo(person, documentMapping);
 
-        person.Name.Should().Be("John Doe");
-        person.Age.Should().Be(30);
+        Assert.Equal("John Doe", person.Name);
+        Assert.Equal(30, person.Age);
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlPerson = new Person();
@@ -157,8 +156,8 @@ public class DocumentTests : DocumentsTestBase
         
         xmlDocument.MapTo(xmlPerson, xmlDocumentMapping);
         
-        xmlPerson.Name.Should().Be("John Doe");
-        xmlPerson.Age.Should().Be(30);
+        Assert.Equal("John Doe", xmlPerson.Name);
+        Assert.Equal(30, xmlPerson.Age);
     }
     
     [Fact]
@@ -173,8 +172,8 @@ public class DocumentTests : DocumentsTestBase
 
         var person = document.MapTo<Person>(documentMapping);
 
-        person.Name.Should().Be("John Doe");
-        person.Age.Should().Be(30);
+        Assert.Equal("John Doe", person.Name);
+        Assert.Equal(30, person.Age);
     }
     
     [Fact]
@@ -189,7 +188,7 @@ public class DocumentTests : DocumentsTestBase
 
         var person = document.MapTo<Person>(documentMapping);
 
-        person.Name.Should().Be("John Doe");
-        person.Age.Should().Be(30);
+        Assert.Equal("John Doe", person.Name);
+        Assert.Equal(30, person.Age);
     }
 }

@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Helpers;
+﻿using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
 
@@ -28,7 +27,7 @@ public class ObjectHelperTests
         result.Add("Age", obj.Age);
         
         // Assert
-        result.Should().NotBeNull();
+        Assert.NotNull(result);
         _outputHelper.WriteLine($"Test Result:");
         _outputHelper.WriteLine(result);
     }
@@ -44,11 +43,11 @@ public class ObjectHelperTests
         var result = ObjectHelper.CreateInstanceFromValues<Dictionary<string, object>>(new Dictionary<string, string?>() { { "Name", obj.Name }, { "Age", obj.Age.ToString() } });
         
         // Assert
-        result.Should().NotBeNull();
+        Assert.NotNull(result);
         _outputHelper.WriteLine($"Test Result:");
         _outputHelper.WriteLine(result);
         
-        result["Name"].Should().Be("John");
-        result["Age"].Should().Be("30");
+        Assert.Equal("John", result["Name"]);
+        Assert.Equal("30", result["Age"]);
     }
 }

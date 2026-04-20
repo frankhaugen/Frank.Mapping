@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
@@ -28,9 +27,9 @@ public class PropertyMappingTests : DocumentsTestBase
         var action3 = new Action(() => new PropertyMapping<Person, string>(x => x.Address.City, cityValuePath));
 
         // Assert
-        action1.Should().NotThrow();
-        action2.Should().NotThrow();
-        action3.Should().NotThrow();
+        Assert.Null(Record.Exception(action1));
+        Assert.Null(Record.Exception(action2));
+        Assert.Null(Record.Exception(action3));
     }
     
     [Fact]
@@ -45,9 +44,9 @@ public class PropertyMappingTests : DocumentsTestBase
         var action3 = new Action(() => new PropertyMapping<Person, string?>(x => x.Address.City, null!));
 
         // Assert
-        action1.Should().Throw<ArgumentNullException>();
-        action2.Should().Throw<ArgumentNullException>();
-        action3.Should().Throw<ArgumentNullException>();
+        Assert.Throws<ArgumentNullException>(action1);
+        Assert.Throws<ArgumentNullException>(action2);
+        Assert.Throws<ArgumentNullException>(action3);
     }
     
     [Fact]
@@ -61,7 +60,7 @@ public class PropertyMappingTests : DocumentsTestBase
         var action1 = new Action(() => new PropertyMapping<Person, string>(null!, nameValuePath));
 
         // Assert
-        action1.Should().Throw<ArgumentNullException>();
+        Assert.Throws<ArgumentNullException>(action1);
     }
     
     [Fact]
@@ -75,7 +74,7 @@ public class PropertyMappingTests : DocumentsTestBase
         var action1 = new Action(() => new PropertyMapping<Person, string>(x => "Name", nameValuePath));
 
         // Assert
-        action1.Should().Throw<ArgumentException>();
+        Assert.Throws<ArgumentException>(action1);
     }
     
     

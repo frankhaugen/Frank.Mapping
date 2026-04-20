@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents.Path;
+﻿using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
 using Xunit.Abstractions;
@@ -24,7 +23,7 @@ public class ConfigPathDefinitionTests : DocumentsTestBase
         var definition = new ConfigPathDefinition(path);
         
         // Assert
-        definition.Path.Should().Be(path);
+        Assert.Equal(path, definition.Path);
     }
     
     [Fact]
@@ -37,6 +36,7 @@ public class ConfigPathDefinitionTests : DocumentsTestBase
         Action act = () => new ConfigPathDefinition(path);
         
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage($"The provided Config path '{path}' is invalid. Config paths should not contain dots. (Parameter 'path')");
+        var ex = Assert.Throws<ArgumentException>(act);
+        Assert.Equal($"The provided config path '{path}' is invalid. Config paths should not contain dots. (Parameter 'path')", ex.Message);
     }
 }

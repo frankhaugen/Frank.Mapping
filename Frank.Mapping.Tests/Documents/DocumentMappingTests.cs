@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Frank.Mapping.Documents;
+﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
 using Xunit.Abstractions;
@@ -33,6 +32,6 @@ public class DocumentMappingTests : DocumentsTestBase
         var action = new Action(() => new DocumentMapping<Person>(documentVariant, propperyMappings));
         
         // Assert
-        action.Should().NotThrow();
+        Assert.Null(Record.Exception(action));
     }
 }
