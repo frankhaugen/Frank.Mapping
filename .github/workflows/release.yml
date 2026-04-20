@@ -51,7 +51,7 @@ jobs:
         run: |
           OIDC_TOKEN=$(curl -sS \
             -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=api.nuget.org" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=nuget.org" \
             | jq -r '.value')
 
           BODY=$(jq -n \
