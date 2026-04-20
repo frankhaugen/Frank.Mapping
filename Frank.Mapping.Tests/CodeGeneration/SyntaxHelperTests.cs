@@ -46,7 +46,9 @@ public class SyntaxHelperTests
         var result = returnStatement.NormalizeWhitespace().ToFullString();
         
         // Assert
-        var expected = SyntaxFactory.ParseStatement(Expected).As<ReturnStatementSyntax>().NormalizeWhitespace().ToFullString();
+        var expected = SyntaxFactory.ParseStatement(Expected) is ReturnStatementSyntax ret
+            ? ret.NormalizeWhitespace().ToFullString()
+            : throw new InvalidCastException("Expected a ReturnStatementSyntax");
         _outputHelper.WriteLine(result);
         _outputHelper.WriteLine(expected);
         // result.Should().Be(expected);

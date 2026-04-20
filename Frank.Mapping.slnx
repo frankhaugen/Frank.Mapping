@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".github/copilot-instructions.md" />
+    <File Path=".github/workflows/merge.yml" />
+    <File Path=".github/workflows/pull-request.yml" />
+    <File Path=".github/workflows/release.yml" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="icon.png" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Frank.Mapping.Analyzers/Frank.Mapping.Analyzers.csproj" />
+  <Project Path="Frank.Mapping.Documents/Frank.Mapping.Documents.csproj" />
+  <Project Path="Frank.Mapping.Tests.Common/Frank.Mapping.Tests.Common.csproj" />
+  <Project Path="Frank.Mapping.Tests.ConsoleApp/Frank.Mapping.Tests.ConsoleApp.csproj" />
+  <Project Path="Frank.Mapping.Tests/Frank.Mapping.Tests.csproj" />
+  <Project Path="Frank.Mapping/Frank.Mapping.csproj" />
+</Solution>
