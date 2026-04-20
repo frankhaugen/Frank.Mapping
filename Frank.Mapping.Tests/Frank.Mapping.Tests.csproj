@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    
+
     <InvariantGlobalization>true</InvariantGlobalization>
     <LineEnding>LF</LineEnding>
   </PropertyGroup>
