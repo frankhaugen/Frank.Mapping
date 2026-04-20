@@ -36,6 +36,33 @@ jobs:
       - name: Pack
         run: dotnet pack Frank.Mapping.slnx --configuration Release --no-build --output ./nupkgs -p:Version=${{ steps.version.outputs.version }}
 
+      - name: Get NuGet API key via trusted publishing
+        id: nuget-auth
+        run: |
+          OIDC_TOKEN=$(curl -sS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=api.nuget.org" \
+            | jq -r '.value')
+
+          BODY=$(jq -n \
+            --arg user "${{ github.repository_owner }}" \
+            '{"username": $user, "tokenType": "ApiKey"}')
+
+          RESPONSE=$(curl -sS \
+            -X POST "https://www.nuget.org/api/v2/token" \
+            -H "Authorization: Bearer $OIDC_TOKEN" \
+            -H "Content-Type: application/json" \
+            -H "User-Agent: GitHubActions/${{ github.run_id }}" \
+            -d "$BODY")
+
+          NUGET_KEY=$(echo "$RESPONSE" | jq -r '.apiKey')
+          if [ -z "$NUGET_KEY" ] || [ "$NUGET_KEY" = "null" ]; then
+            echo "Failed to get NuGet API key. Response: $RESPONSE"
+            exit 1
+          fi
+          echo "::add-mask::$NUGET_KEY"
+          echo "key=$NUGET_KEY" >> $GITHUB_OUTPUT
+
       - name: Push to NuGet.org
-        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key oidc --skip-duplicate
+        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.nuget-auth.outputs.key }}" --skip-duplicate
 
