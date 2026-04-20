@@ -26,7 +26,7 @@ The solution has four main projects:
 
 - **`Frank.Mapping.Documents`** — Separate package for mapping structured text documents (JSON/XML) to objects. Uses `JsonPath.Net` and `SafeFluentXPath`. `Document` auto-detects format via `DocumentVariantHelper` and supports extraction via `ValuePath` lists or `DocumentMapping<T>` definitions with `PropertyMapping` entries.
 
-- **`Frank.Mapping.Tests`** — xUnit test project that references all three libraries above. Tests for the Roslyn analyzer use `CSharpAnalyzerTest<MappingAnalyzer, DefaultVerifier>` from `Microsoft.CodeAnalysis.Analyzer.Testing`. `Frank.Mapping.Tests.Common` holds shared test fixtures and source-code strings used by analyzer tests.
+- **`Frank.Mapping.Tests`** — TUnit test project that references all three libraries above. Tests for the Roslyn analyzer use `CSharpAnalyzerTest<MappingAnalyzer, DefaultVerifier>` from `Microsoft.CodeAnalysis.Analyzer.Testing`. `Frank.Mapping.Tests.Common` holds shared test fixtures and source-code strings used by analyzer tests.
 
 ## Key Conventions
 
@@ -45,11 +45,12 @@ Mappings are always registered as **singletons**.
 - Test projects suppress many CA/xUnit warnings and disable NET analyzers
 
 ### Test Style
-- xUnit with `ITestOutputHelper` injected via constructor for diagnostic output
-- FluentAssertions used alongside `Assert.*` (both styles coexist)
+- **TUnit** test framework with `[Test]` attribute and `async Task` test methods
+- All assertions use `await Assert.That(actual).IsXxx(expected)` style
+- No `ITestOutputHelper` — use `Console.WriteLine(...)` for diagnostic output (TUnit captures stdout)
 - Test classes are annotated with `[TestSubject(typeof(...))]` from `JetBrains.Annotations`
 - Test fixtures (reusable source/destination types) live in `Frank.Mapping.Tests.Common`
-- The `TestFixer` analyzer test is permanently skipped (`Skip = "..."`) due to environment sensitivity
+- The `TestFixer` analyzer test is permanently skipped (`[Test, Skip("...")]`) due to environment sensitivity
 
 ### Analyzer Tests
 When writing new Roslyn analyzer tests, use `CSharpAnalyzerTest<TAnalyzer, DefaultVerifier>` and declare expected diagnostics with both compiler errors (`CS*`) and custom warnings (`MAP*`). Source code strings for these tests live in `MappingSourceCode` (in `Frank.Mapping.Tests.Common/TestingInfrastructure/SourceCode/`).
