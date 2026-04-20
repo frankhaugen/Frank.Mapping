@@ -1,9 +1,15 @@
 name: Release Workflow
 
 on:
+  # Fires when a release is manually created from the GitHub UI
   release:
     types: [published]
+  # Manual re-publish with explicit version
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package version (e.g. 6.0.0)'
+        required: true
 
 permissions:
   id-token: write
@@ -20,11 +26,15 @@ jobs:
         with:
           dotnet-version: '10.x'
 
-      - name: Set version from release tag
+      - name: Resolve version
         id: version
         run: |
-          TAG="${{ github.event.release.tag_name }}"
-          VERSION="${TAG#v}"
+          # workflow_dispatch takes priority; fall back to the release tag
+          VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+            VERSION="${TAG#v}"
+          fi
           echo "version=${VERSION:-0.0.0-dev}" >> $GITHUB_OUTPUT
 
       - name: Restore
