@@ -1,0 +1,57 @@
+name: Release Workflow
+
+on:
+  # Fires when a release is manually created from the GitHub UI
+  release:
+    types: [published]
+  # Manual re-publish with explicit version
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package version (e.g. 6.0.0)'
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to NuGet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Resolve version
+        id: version
+        run: |
+          # workflow_dispatch takes priority; fall back to the release tag
+          VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+            VERSION="${TAG#v}"
+          fi
+          echo "version=${VERSION:-0.0.0-dev}" >> $GITHUB_OUTPUT
+
+      - name: Restore
+        run: dotnet restore Frank.Mapping.slnx
+
+      - name: Build
+        run: dotnet build Frank.Mapping.slnx --configuration Release --no-restore
+
+      - name: Pack
+        run: dotnet pack Frank.Mapping.slnx --configuration Release --no-build --output ./nupkgs -p:Version=${{ steps.version.outputs.version }}
+
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: nuget-auth
+        with:
+          user: ${{ github.repository_owner }}
+
+      - name: Push to NuGet.org
+        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.nuget-auth.outputs.NUGET_API_KEY }}" --skip-duplicate
+
