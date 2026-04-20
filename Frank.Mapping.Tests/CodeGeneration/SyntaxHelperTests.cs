@@ -7,22 +7,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.CodeGeneration;
 
 [TestSubject(typeof(SyntaxHelper))]
 public class SyntaxHelperTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-
-    public SyntaxHelperTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
-    public void GenerateMappingInitializer_GeneratesCorrectSyntax()
+    [Test]
+    public async Task GenerateMappingInitializer_GeneratesCorrectSyntax()
     {
         // Arrange
         var compilation = CreateCompilation();
@@ -48,9 +40,9 @@ public class SyntaxHelperTests
         var expected = SyntaxFactory.ParseStatement(Expected) is ReturnStatementSyntax ret
             ? ret.NormalizeWhitespace().ToFullString()
             : throw new InvalidCastException("Expected a ReturnStatementSyntax");
-        _outputHelper.WriteLine(result);
-        _outputHelper.WriteLine(expected);
-        // result assertion omitted — SyntaxHelper output is verified visually via _outputHelper
+        Console.WriteLine(result);
+        Console.WriteLine(expected);
+        // result assertion omitted -- SyntaxHelper output is verified visually via Console.WriteLine
     }
 
     private string Expected = MappingSourceCode.TestResultCode;

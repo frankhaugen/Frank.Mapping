@@ -5,21 +5,13 @@ using System.Text.Json.Nodes;
 using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Documents.Models;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Paths;
 
 public class JsonPathExtensionsTests
 {
-    private readonly ITestOutputHelper _output;
-
-    public JsonPathExtensionsTests(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
-    [Fact]
-    public void ShouldConvertSimplePropertyExpressionToJsonPath()
+    [Test]
+    public async Task ShouldConvertSimplePropertyExpressionToJsonPath()
     {
         // Arrange
         Expression<Func<SampleClass, object>> expression = x => x.Name;
@@ -28,12 +20,12 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        Assert.Equal("$.Name", jsonPath.Path);
-        _output.WriteLine($"Test Result: {jsonPath.Path}");
+        await Assert.That(jsonPath.Path).IsEqualTo("$.Name");
+        Console.WriteLine($"Test Result: {jsonPath.Path}");
     }
 
-    [Fact]
-    public void ShouldConvertAnotherSimplePropertyExpressionToJsonPath()
+    [Test]
+    public async Task ShouldConvertAnotherSimplePropertyExpressionToJsonPath()
     {
         // Arrange
         Expression<Func<SampleClass, int>> expression = x => x.Age;
@@ -42,12 +34,12 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        Assert.Equal("$.Age", jsonPath.Path);
-        _output.WriteLine($"Test Result: {jsonPath.Path}");
+        await Assert.That(jsonPath.Path).IsEqualTo("$.Age");
+        Console.WriteLine($"Test Result: {jsonPath.Path}");
     }
     
-    [Fact]
-    public void ShouldConvertNestedPropertyExpressionToJsonPath()
+    [Test]
+    public async Task ShouldConvertNestedPropertyExpressionToJsonPath()
     {
         // Arrange
         Expression<Func<SampleClass, string?>> expression = x => x.Address.City;
@@ -56,12 +48,12 @@ public class JsonPathExtensionsTests
         var jsonPath = expression.GetJsonPathDefinition();
         
         // Assert
-        Assert.Equal("$.Address.City", jsonPath.Path);
-        _output.WriteLine($"Test Result: {jsonPath.Path}");
+        await Assert.That(jsonPath.Path).IsEqualTo("$.Address.City");
+        Console.WriteLine($"Test Result: {jsonPath.Path}");
     }
     
-    [Fact]
-    public void ShouldConvertNestedIndexerExpressionToJsonPath()
+    [Test]
+    public async Task ShouldConvertNestedIndexerExpressionToJsonPath()
     {
         // Arrange
         Expression<Func<SampleClass, string?>> expression = x => x.Addresses[0].City;
@@ -84,11 +76,11 @@ public class JsonPathExtensionsTests
         var result = evalResult.Matches!.Select(x => x.Value!.GetValue<string>()).First();
         
         // Assert
-        _output.WriteLine($"Expression: {expression}");
-        _output.WriteLine($"Test Result: {jsonPath}");
-        _output.WriteLine(result);
-        Assert.Equal("$.Addresses[0].City", jsonPath.ToString());
-        Assert.Equal("New York", result);
+        Console.WriteLine($"Expression: {expression}");
+        Console.WriteLine($"Test Result: {jsonPath}");
+        Console.WriteLine(result);
+        await Assert.That(jsonPath.ToString()).IsEqualTo("$.Addresses[0].City");
+        await Assert.That(result).IsEqualTo("New York");
     }
 
     // Sample class for testing

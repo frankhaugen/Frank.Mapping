@@ -1,21 +1,13 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests;
 
 [TestSubject(typeof(MappingProvider))]
 public class MappingProviderTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-
-    public MappingProviderTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
-    public void Map_ReturnsCorrectResult()
+    [Test]
+    public async Task Map_ReturnsCorrectResult()
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
@@ -33,12 +25,12 @@ public class MappingProviderTests
         var to = mappingProvider.Map<From, To>(from);
 
         // Assert
-        Assert.Equal(from.Id, to.Id);
-        Assert.Equal($"{from.FirstName} {from.LastName}", to.Name);
+        await Assert.That(to.Id).IsEqualTo(from.Id);
+        await Assert.That(to.Name).IsEqualTo($"{from.FirstName} {from.LastName}");
     }
     
-    [Fact]
-    public void GetMappingDefinition_ReturnsCorrectMappingDefinition()
+    [Test]
+    public async Task GetMappingDefinition_ReturnsCorrectMappingDefinition()
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
@@ -50,12 +42,12 @@ public class MappingProviderTests
         var mappingDefinition = mappingProvider.GetMappingDefinition<From, To>();
 
         // Assert
-        Assert.NotNull(mappingDefinition);
-        Assert.IsType<MyMappingDefinition>(mappingDefinition);
+        await Assert.That(mappingDefinition).IsNotNull();
+        await Assert.That(mappingDefinition).IsAssignableTo<MyMappingDefinition>();
     }
     
-    [Fact]
-    public void GetMappingDefinition_ThrowsExceptionWhenMappingDefinitionNotFound()
+    [Test]
+    public async Task GetMappingDefinition_ThrowsExceptionWhenMappingDefinitionNotFound()
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
@@ -63,25 +55,21 @@ public class MappingProviderTests
             .BuildServiceProvider();
         var mappingProvider = serviceProvider.GetRequiredService<IMappingProvider>();
 
-        // Act
-        var exception = Record.Exception(() => mappingProvider.GetMappingDefinition<To, From>());
-
-        // Assert
-        Assert.NotNull(exception);
-        Assert.IsType<MappingDefinitionNotFoundException>(exception);
+        // Act & Assert
+        await Assert.That(() => mappingProvider.GetMappingDefinition<To, From>()).ThrowsExactly<MappingDefinitionNotFoundException>();
     }
     
-private class MyMappingDefinition : IMappingDefinition<From, To>
-{
-    public To Map(From from)
+    private class MyMappingDefinition : IMappingDefinition<From, To>
     {
-        return new()
+        public To Map(From from)
         {
-            Id = from.Id,
-            Name = $"{from.FirstName} {from.LastName}"
-        };
+            return new()
+            {
+                Id = from.Id,
+                Name = $"{from.FirstName} {from.LastName}"
+            };
+        }
     }
-}
     
     private class From
     {

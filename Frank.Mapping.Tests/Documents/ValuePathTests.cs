@@ -1,19 +1,13 @@
 ﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public class ValuePathTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public ValuePathTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-
-    [Fact]
-    public void Constructor_WithDocumentVariantAndPathAndType_SetsProperties()
+    [Test]
+    public async Task Constructor_WithDocumentVariantAndPathAndType_SetsProperties()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -25,14 +19,14 @@ public class ValuePathTests : DocumentsTestBase
         var valuePath = new ValuePath<string>(documentVariant, path);
 
         // Assert
-        Assert.Equal(documentVariant, valuePath.DocumentVariant);
-        Assert.Equal(path, valuePath.Path);
-        Assert.Equal(type, valuePath.ValueType);
-        Assert.Equal("John Doe", valuePath.GetValue(jsonDocument));
+        await Assert.That(valuePath.DocumentVariant).IsEqualTo(documentVariant);
+        await Assert.That(valuePath.Path).IsEqualTo(path);
+        await Assert.That(valuePath.ValueType).IsEqualTo(type);
+        await Assert.That(valuePath.GetValue(jsonDocument)).IsEqualTo("John Doe");
     }
     
-    [Fact]
-    public void Constructor_WithDocumentVariantAndPathAndType_ThrowsWhenDocumentVariantIsNull()
+    [Test]
+    public async Task Constructor_WithDocumentVariantAndPathAndType_ThrowsWhenDocumentVariantIsNull()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -44,9 +38,9 @@ public class ValuePathTests : DocumentsTestBase
         var valuePath = new ValuePath(documentVariant, path, type);
 
         // Assert
-        Assert.Equal(documentVariant, valuePath.DocumentVariant);
-        Assert.Equal(path, valuePath.Path);
-        Assert.Equal(type, valuePath.ValueType);
-        Assert.Equal("John Doe", valuePath.GetValue(jsonDocument));
+        await Assert.That(valuePath.DocumentVariant).IsEqualTo(documentVariant);
+        await Assert.That(valuePath.Path).IsEqualTo(path);
+        await Assert.That(valuePath.ValueType).IsEqualTo(type);
+        await Assert.That(valuePath.GetValue(jsonDocument)).IsEqualTo("John Doe");
     }
 }

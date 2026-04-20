@@ -4,20 +4,14 @@ using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Common.TestingInfrastructure;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Extensions;
 
 [TestSubject(typeof(JsonPathDefinitionExtensions))]
 public class JsonPathDefinitionExtensionsTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public JsonPathDefinitionExtensionsTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-    
-    [Fact]
-    public void GetValue_CreatesCorrectJsonPathDefinition()
+    [Test]
+    public async Task GetValue_CreatesCorrectJsonPathDefinition()
     {
         // Arrange
         var jsonPath = "$.Car.Insurance.PolicyNumber";
@@ -26,8 +20,8 @@ public class JsonPathDefinitionExtensionsTests : DocumentsTestBase
         var result = PathDefinition.Create<MyPath>(jsonPath);
         
         // Assert
-        _outputHelper.WriteLine(result);
-        Assert.Equivalent(new MyPath(jsonPath), result);
+        Console.WriteLine(result?.ToString());
+        await Assert.That(result).IsEqualTo(new MyPath(jsonPath));
         
         var myType = new TestSourceClass()
         {
@@ -52,15 +46,15 @@ public class JsonPathDefinitionExtensionsTests : DocumentsTestBase
             }
         };
         
-        var value = result.GetValue(myType);
-        _outputHelper.WriteLine(value);
-        Assert.Equal("123456", value);
+        var value = result!.GetValue(myType);
+        Console.WriteLine(value);
+        await Assert.That(value).IsEqualTo("123456");
         
         var genericValue = result.GetValue<string>(myType);
-        _outputHelper.WriteLine(genericValue);
-        Assert.Equal("123456", genericValue);
+        Console.WriteLine(genericValue);
+        await Assert.That(genericValue).IsEqualTo("123456");
         
-        Assert.Equal(genericValue, value);
+        await Assert.That(genericValue).IsEqualTo((string?)value);
     }
 }
 

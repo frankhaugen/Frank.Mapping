@@ -1,19 +1,13 @@
 ﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public class PropertyMappingTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public PropertyMappingTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-
-    [Fact]
-    public void DocumentMapping_Ctor_ThrowsNot()
+    [Test]
+    public async Task DocumentMapping_Ctor_ThrowsNot()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -27,13 +21,13 @@ public class PropertyMappingTests : DocumentsTestBase
         var action3 = new Action(() => new PropertyMapping<Person, string>(x => x.Address.City, cityValuePath));
 
         // Assert
-        Assert.Null(Record.Exception(action1));
-        Assert.Null(Record.Exception(action2));
-        Assert.Null(Record.Exception(action3));
+        await Assert.That(action1).ThrowsNothing();
+        await Assert.That(action2).ThrowsNothing();
+        await Assert.That(action3).ThrowsNothing();
     }
     
-    [Fact]
-    public void DocumentMapping_Ctor_ThrowsWhenValuePathIsNull()
+    [Test]
+    public async Task DocumentMapping_Ctor_ThrowsWhenValuePathIsNull()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -44,13 +38,13 @@ public class PropertyMappingTests : DocumentsTestBase
         var action3 = new Action(() => new PropertyMapping<Person, string?>(x => x.Address.City, null!));
 
         // Assert
-        Assert.Throws<ArgumentNullException>(action1);
-        Assert.Throws<ArgumentNullException>(action2);
-        Assert.Throws<ArgumentNullException>(action3);
+        await Assert.That(action1).ThrowsExactly<ArgumentNullException>();
+        await Assert.That(action2).ThrowsExactly<ArgumentNullException>();
+        await Assert.That(action3).ThrowsExactly<ArgumentNullException>();
     }
     
-    [Fact]
-    public void DocumentMapping_Ctor_ThrowsWhenPropertyExpressionIsNull()
+    [Test]
+    public async Task DocumentMapping_Ctor_ThrowsWhenPropertyExpressionIsNull()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -60,11 +54,11 @@ public class PropertyMappingTests : DocumentsTestBase
         var action1 = new Action(() => new PropertyMapping<Person, string>(null!, nameValuePath));
 
         // Assert
-        Assert.Throws<ArgumentNullException>(action1);
+        await Assert.That(action1).ThrowsExactly<ArgumentNullException>();
     }
     
-    [Fact]
-    public void DocumentMapping_Ctor_ThrowsWhenPropertyExpressionIsNotMemberExpression()
+    [Test]
+    public async Task DocumentMapping_Ctor_ThrowsWhenPropertyExpressionIsNotMemberExpression()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -74,8 +68,6 @@ public class PropertyMappingTests : DocumentsTestBase
         var action1 = new Action(() => new PropertyMapping<Person, string>(x => "Name", nameValuePath));
 
         // Assert
-        Assert.Throws<ArgumentException>(action1);
+        await Assert.That(action1).ThrowsExactly<ArgumentException>();
     }
-    
-    
 }

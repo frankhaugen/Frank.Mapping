@@ -1,20 +1,14 @@
 ﻿using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Path;
 
 [TestSubject(typeof(ConfigPathDefinition))]
 public class ConfigPathDefinitionTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public ConfigPathDefinitionTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-    
-    [Fact]
-    public void ShouldCreateConfigPathDefinition()
+    [Test]
+    public async Task ShouldCreateConfigPathDefinition()
     {
         // Arrange
         const string path = "root:element";
@@ -23,11 +17,11 @@ public class ConfigPathDefinitionTests : DocumentsTestBase
         var definition = new ConfigPathDefinition(path);
         
         // Assert
-        Assert.Equal(path, definition.Path);
+        await Assert.That(definition.Path).IsEqualTo(path);
     }
     
-    [Fact]
-    public void ShouldThrowArgumentExceptionWhenCreatingConfigPathDefinitionWithInvalidPath()
+    [Test]
+    public async Task ShouldThrowArgumentExceptionWhenCreatingConfigPathDefinitionWithInvalidPath()
     {
         // Arrange
         const string path = "System.InvalidPath[3].Count";
@@ -36,7 +30,7 @@ public class ConfigPathDefinitionTests : DocumentsTestBase
         Action act = () => new ConfigPathDefinition(path);
         
         // Assert
-        var ex = Assert.Throws<ArgumentException>(act);
-        Assert.Equal($"The provided config path '{path}' is invalid. Config paths should not contain dots. (Parameter 'path')", ex.Message);
+        var ex = await Assert.That(act).ThrowsExactly<ArgumentException>();
+        await Assert.That(ex!.Message).IsEqualTo($"The provided config path '{path}' is invalid. Config paths should not contain dots. (Parameter 'path')");
     }
 }

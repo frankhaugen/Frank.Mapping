@@ -14,21 +14,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Analyzers;
 
 [TestSubject(typeof(MappingAnalyzer))]
 public class MappingAnalyzerTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-
-    public MappingAnalyzerTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
+    [Test]
     public async Task Test()
     {
         var code = MappingSourceCode.TestSourceCode;
@@ -48,16 +40,16 @@ public class MappingAnalyzerTests
             },
             ExpectedDiagnostics = 
             {
-                DiagnosticResult.CompilerError("CS0246").WithSpan(5, 27, 5, 84).WithArguments("IMappingDefinition<,>"), // IMappingDefinition<,> could not be found in the current context
-                DiagnosticResult.CompilerWarning("MAP1001").WithSpan(7, 5, 9, 6).WithArguments("SourceType", "TargetType"), // Mapping between SourceType and TargetType is not defined
-                DiagnosticResult.CompilerError("CS0161").WithSpan(7, 33, 7, 36).WithArguments("Frank.Mapping.Tests.TestingInfrastructure.TestMapper.Map(Frank.Mapping.Tests.TestingInfrastructure.TestSourceClass)"), // TestMapper.Map(TestSourceClass) does not return a value
-                DiagnosticResult.CompilerError("CS0246").WithSpan(24, 12, 24, 16).WithArguments("Guid") // Guid could not be found in the current context
+                DiagnosticResult.CompilerError("CS0246").WithSpan(5, 27, 5, 84).WithArguments("IMappingDefinition<,>"),
+                DiagnosticResult.CompilerWarning("MAP1001").WithSpan(7, 5, 9, 6).WithArguments("SourceType", "TargetType"),
+                DiagnosticResult.CompilerError("CS0161").WithSpan(7, 33, 7, 36).WithArguments("Frank.Mapping.Tests.TestingInfrastructure.TestMapper.Map(Frank.Mapping.Tests.TestingInfrastructure.TestSourceClass)"),
+                DiagnosticResult.CompilerError("CS0246").WithSpan(24, 12, 24, 16).WithArguments("Guid")
             }
         }.RunAsync();
         
     }
     
-    [Fact (Skip = "This test is overly sensitive to the environment it runs in and is not reliable")]
+    [Test, Skip("This test is overly sensitive to the environment it runs in and is not reliable")]
     public async Task TestFixer()
     {
         var code = MappingSourceCode.TestSourceCode;
@@ -74,10 +66,10 @@ public class MappingAnalyzerTests
             ReferenceAssemblies = ReferenceAssemblies.Default,
             ExpectedDiagnostics =
             {
-                DiagnosticResult.CompilerError("CS0246").WithSpan(5, 27, 5, 84).WithArguments("IMappingDefinition<,>"), // IMappingDefinition<,> could not be found in the current context
-                DiagnosticResult.CompilerWarning("MAP1001").WithSpan(7, 5, 9, 6).WithArguments("SourceType", "TargetType"), // Mapping between SourceType and TargetType is not defined
-                DiagnosticResult.CompilerError("CS0161").WithSpan(7, 33, 7, 36).WithArguments("Frank.Mapping.Tests.TestingInfrastructure.TestMapper.Map(Frank.Mapping.Tests.TestingInfrastructure.TestSourceClass)"), // TestMapper.Map(TestSourceClass) does not return a value
-                DiagnosticResult.CompilerError("CS0246").WithSpan(24, 12, 24, 16).WithArguments("Guid") // Guid could not be found in the current context
+                DiagnosticResult.CompilerError("CS0246").WithSpan(5, 27, 5, 84).WithArguments("IMappingDefinition<,>"),
+                DiagnosticResult.CompilerWarning("MAP1001").WithSpan(7, 5, 9, 6).WithArguments("SourceType", "TargetType"),
+                DiagnosticResult.CompilerError("CS0161").WithSpan(7, 33, 7, 36).WithArguments("Frank.Mapping.Tests.TestingInfrastructure.TestMapper.Map(Frank.Mapping.Tests.TestingInfrastructure.TestSourceClass)"),
+                DiagnosticResult.CompilerError("CS0246").WithSpan(24, 12, 24, 16).WithArguments("Guid")
             }
         }.RunAsync();
     }
@@ -97,5 +89,4 @@ public class MappingAnalyzerTests
             
         return formattedText.ToString();
     }
-
 }

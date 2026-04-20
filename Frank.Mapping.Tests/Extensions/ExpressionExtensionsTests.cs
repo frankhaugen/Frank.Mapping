@@ -3,20 +3,14 @@ using System.Linq.Expressions;
 using Frank.Mapping.Documents.Extensions;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Extensions;
 
 [TestSubject(typeof(ExpressionExtensions))]
 public class ExpressionExtensionsTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public ExpressionExtensionsTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-    
-    [Fact]
-    public void GetMemberName_WhenCalledWithPropertyExpression_ReturnsMemberName()
+    [Test]
+    public async Task GetMemberName_WhenCalledWithPropertyExpression_ReturnsMemberName()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.StringProperty;
@@ -25,11 +19,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var memberName = expression.GetPropertyInfo().Name;
         
         // Assert
-        Assert.Equal(nameof(SimpleDocument.StringProperty), memberName);
+        await Assert.That(memberName).IsEqualTo(nameof(SimpleDocument.StringProperty));
     }
     
-    [Fact]
-    public void GetMemberName_WhenCalledWithNestedPropertyExpression_ReturnsMemberName()
+    [Test]
+    public async Task GetMemberName_WhenCalledWithNestedPropertyExpression_ReturnsMemberName()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.NestedDocument.StringProperty;
@@ -38,11 +32,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var memberName = expression.GetPropertyInfo().Name;
         
         // Assert
-        Assert.Equal(nameof(SimpleDocument.NestedDocument.StringProperty), memberName);
+        await Assert.That(memberName).IsEqualTo(nameof(SimpleDocument.NestedDocument.StringProperty));
     }
     
-    [Fact]
-    public void GetXPathDefinition_WhenCalledWithPropertyExpression_ReturnsXPathDefinition()
+    [Test]
+    public async Task GetXPathDefinition_WhenCalledWithPropertyExpression_ReturnsXPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.StringProperty;
@@ -51,11 +45,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var xPathDefinition = expression.GetXPathDefinition();
         
         // Assert
-        Assert.Equal("/StringProperty", xPathDefinition.Path);
+        await Assert.That(xPathDefinition.Path).IsEqualTo("/StringProperty");
     }
     
-    [Fact]
-    public void GetXPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsXPathDefinition()
+    [Test]
+    public async Task GetXPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsXPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.NestedDocument.StringProperty;
@@ -64,11 +58,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var xPathDefinition = expression.GetXPathDefinition();
         
         // Assert
-        Assert.Equal("/NestedDocument/StringProperty", xPathDefinition.Path);
+        await Assert.That(xPathDefinition.Path).IsEqualTo("/NestedDocument/StringProperty");
     }
     
-    [Fact]
-    public void GetJsonPathDefinition_WhenCalledWithPropertyExpression_ReturnsJsonPathDefinition()
+    [Test]
+    public async Task GetJsonPathDefinition_WhenCalledWithPropertyExpression_ReturnsJsonPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.StringProperty;
@@ -77,11 +71,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var jsonPathDefinition = expression.GetJsonPathDefinition();
         
         // Assert
-        Assert.Equal("$.StringProperty", jsonPathDefinition.Path);
+        await Assert.That(jsonPathDefinition.Path).IsEqualTo("$.StringProperty");
     }
     
-    [Fact]
-    public void GetJsonPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsJsonPathDefinition()
+    [Test]
+    public async Task GetJsonPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsJsonPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.NestedDocument.StringProperty;
@@ -90,11 +84,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var jsonPathDefinition = expression.GetJsonPathDefinition();
         
         // Assert
-        Assert.Equal("$.NestedDocument.StringProperty", jsonPathDefinition.Path);
+        await Assert.That(jsonPathDefinition.Path).IsEqualTo("$.NestedDocument.StringProperty");
     }
     
-    [Fact]
-    public void GetConfigPathDefinition_WhenCalledWithPropertyExpression_ReturnsConfigPathDefinition()
+    [Test]
+    public async Task GetConfigPathDefinition_WhenCalledWithPropertyExpression_ReturnsConfigPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.StringProperty;
@@ -103,11 +97,11 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var configPathDefinition = expression.GetConfigPathDefinition();
         
         // Assert
-        Assert.Equal("StringProperty", configPathDefinition.Path);
+        await Assert.That(configPathDefinition.Path).IsEqualTo("StringProperty");
     }
     
-    [Fact]
-    public void GetConfigPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsConfigPathDefinition()
+    [Test]
+    public async Task GetConfigPathDefinition_WhenCalledWithNestedPropertyExpression_ReturnsConfigPathDefinition()
     {
         // Arrange
         Expression<Func<SimpleDocument, string>> expression = x => x.NestedDocument.StringProperty;
@@ -116,7 +110,7 @@ public class ExpressionExtensionsTests : DocumentsTestBase
         var configPathDefinition = expression.GetConfigPathDefinition();
         
         // Assert
-        Assert.Equal("NestedDocument:StringProperty", configPathDefinition.Path);
+        await Assert.That(configPathDefinition.Path).IsEqualTo("NestedDocument:StringProperty");
     }
     
     [ExcludeFromCodeCoverage]

@@ -1,22 +1,14 @@
 ﻿using Frank.Mapping.Documents.Helpers;
 using Frank.Mapping.Documents.Models.Enums;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Helpers;
 
 [TestSubject(typeof(DocumentVariantHelper))]
 public class DocumentVariantHelperTests
 {
-    private readonly ITestOutputHelper _output;
-
-    public DocumentVariantHelperTests(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
-    [Fact]
-    public void ShouldGetDocumentVariant()
+    [Test]
+    public async Task ShouldGetDocumentVariant()
     {
         // Arrange
         var document = "<xml></xml>";
@@ -25,12 +17,12 @@ public class DocumentVariantHelperTests
         var result = DocumentVariantHelper.GetDocumentVariant(document);
         
         // Assert
-        Assert.Equal(DocumentVariant.Xml, result);
-        _output.WriteLine($"Test Result: {result}");
+        await Assert.That(result).IsEqualTo(DocumentVariant.Xml);
+        Console.WriteLine($"Test Result: {result}");
     }
     
-    [Fact]
-    public void ShouldGetDocumentVariant_WhenJson()
+    [Test]
+    public async Task ShouldGetDocumentVariant_WhenJson()
     {
         // Arrange
         var document = "{\"key\": \"value\"}";
@@ -39,17 +31,17 @@ public class DocumentVariantHelperTests
         var result = DocumentVariantHelper.GetDocumentVariant(document);
         
         // Assert
-        Assert.Equal(DocumentVariant.Json, result);
-        _output.WriteLine($"Test Result: {result}");
+        await Assert.That(result).IsEqualTo(DocumentVariant.Json);
+        Console.WriteLine($"Test Result: {result}");
     }
     
-    [Fact]
-    public void ShouldThrowException_WhenDocumentVariantNotRecognized()
+    [Test]
+    public async Task ShouldThrowException_WhenDocumentVariantNotRecognized()
     {
         // Arrange
         var document = "document";
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => DocumentVariantHelper.GetDocumentVariant(document));
+        await Assert.That(() => DocumentVariantHelper.GetDocumentVariant(document)).ThrowsExactly<ArgumentException>();
     }
 }

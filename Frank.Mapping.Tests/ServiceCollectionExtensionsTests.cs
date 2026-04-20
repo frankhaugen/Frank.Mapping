@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests;
 
-public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
+public class ServiceCollectionExtensionsTests
 {
-    private readonly ITestOutputHelper _outputHelper = outputHelper;
-
-    [Fact]
-    public void AddSimpleMapping_ShouldAddMappingDefinitionToServices()
+    [Test]
+    public async Task AddSimpleMapping_ShouldAddMappingDefinitionToServices()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -20,15 +17,15 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var mappingDefinition = serviceProvider.GetService<IMappingDefinition<Version, string>>();
-        Assert.NotNull(mappingDefinition);
+        await Assert.That(mappingDefinition).IsNotNull();
         
-        var result = mappingDefinition.Map(new Version(1, 2, 3, 4));
-        _outputHelper.WriteLine(result);
-        Assert.Equal("1.2", result);
+        var result = mappingDefinition!.Map(new Version(1, 2, 3, 4));
+        Console.WriteLine(result);
+        await Assert.That(result).IsEqualTo("1.2");
     }
 
-    [Fact]
-    public void AddSimpleMapping_ShouldAddMappingProviderToServices()
+    [Test]
+    public async Task AddSimpleMapping_ShouldAddMappingProviderToServices()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -40,25 +37,25 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var mappingProvider = serviceProvider.GetService<IMappingProvider>();
-        Assert.NotNull(mappingProvider);
+        await Assert.That(mappingProvider).IsNotNull();
         
-        var result = mappingProvider.Map<Version, string>(new Version(1, 2, 3, 4));
-        _outputHelper.WriteLine(result);
-        Assert.Equal("1.2", result);
+        var result = mappingProvider!.Map<Version, string>(new Version(1, 2, 3, 4));
+        Console.WriteLine(result);
+        await Assert.That(result).IsEqualTo("1.2");
     }
 
-    [Fact]
-    public void AddSimpleMapping_ShouldThrowException_WhenMapIsNull()
+    [Test]
+    public async Task AddSimpleMapping_ShouldThrowException_WhenMapIsNull()
     {
         // Arrange
         var services = new ServiceCollection();
-        Func<Version, string> map = null;
+        Func<Version, string> map = null!;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => services.AddSimpleMapping<Version, string>(map));
+        await Assert.That(() => services.AddSimpleMapping<Version, string>(map)).ThrowsExactly<ArgumentNullException>();
     }
     
-    [Fact]
+    [Test]
     public async Task AddAsyncMappingDefinition_ShouldAddMappingDefinitionToServices()
     {
         // Arrange
@@ -70,11 +67,11 @@ public class ServiceCollectionExtensionsTests(ITestOutputHelper outputHelper)
         // Assert
         var serviceProvider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
         var mappingDefinition = serviceProvider.GetService<IAsyncMappingDefinition<Version, string>>();
-        Assert.NotNull(mappingDefinition);
+        await Assert.That(mappingDefinition).IsNotNull();
         
-        var result = await mappingDefinition.MapAsync(new Version(1, 2, 3, 4));
-        _outputHelper.WriteLine(result);
-        Assert.Equal("1.2", result);
+        var result = await mappingDefinition!.MapAsync(new Version(1, 2, 3, 4));
+        Console.WriteLine(result);
+        await Assert.That(result).IsEqualTo("1.2");
     }
 
     public class AsyncMapping : IAsyncMappingDefinition<Version, string>

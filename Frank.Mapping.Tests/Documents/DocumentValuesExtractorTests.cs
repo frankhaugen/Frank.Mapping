@@ -1,19 +1,13 @@
 ﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public class DocumentValuesExtractorTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public DocumentValuesExtractorTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-
-    [Fact]
-    public void ExtractValuesFromDocument()
+    [Test]
+    public async Task ExtractValuesFromDocument()
     {
         // Arrange
         var valuePaths = new List<ValuePath>
@@ -30,14 +24,14 @@ public class DocumentValuesExtractorTests : DocumentsTestBase
         var values = documentValuesExtractor.ExtractValuesFromDocument(jsonDocument).ToList();
 
         // Assert
-        Assert.NotNull(values);
-        Assert.Equal(4, values.Count);
+        await Assert.That(values).IsNotNull();
+        await Assert.That(values.Count).IsEqualTo(4);
         
-        _outputHelper.WriteLine(values.Select(x => x.ToString()));
+        Console.WriteLine(string.Join(Environment.NewLine, values.Select(x => x.ToString())));
     }
     
-    [Fact]
-    public void ExtractValuesFromXmlDocument()
+    [Test]
+    public async Task ExtractValuesFromXmlDocument()
     {
         // Arrange
         var valuePaths = new List<ValuePath>
@@ -54,9 +48,9 @@ public class DocumentValuesExtractorTests : DocumentsTestBase
         var values = documentValuesExtractor.ExtractValuesFromDocument(xmlDocument).ToList();
 
         // Assert
-        Assert.NotNull(values);
-        Assert.Equal(4, values.Count);
+        await Assert.That(values).IsNotNull();
+        await Assert.That(values.Count).IsEqualTo(4);
         
-        _outputHelper.WriteLine(values.Select(x => x.ToString()));
+        Console.WriteLine(string.Join(Environment.NewLine, values.Select(x => x.ToString())));
     }
 }

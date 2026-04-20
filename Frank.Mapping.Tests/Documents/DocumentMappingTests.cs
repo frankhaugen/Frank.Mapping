@@ -1,19 +1,13 @@
 ﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public class DocumentMappingTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public DocumentMappingTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-
-    [Fact]
-    public void Test1()
+    [Test]
+    public async Task Test1()
     {
         // Arrange
         var documentVariant = DocumentVariant.Json;
@@ -32,6 +26,6 @@ public class DocumentMappingTests : DocumentsTestBase
         var action = new Action(() => new DocumentMapping<Person>(documentVariant, propperyMappings));
         
         // Assert
-        Assert.Null(Record.Exception(action));
+        await Assert.That(action).ThrowsNothing();
     }
 }

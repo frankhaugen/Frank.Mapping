@@ -1,20 +1,14 @@
 ﻿using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Path;
 
 [TestSubject(typeof(XPathDefinition))]
 public class XPathDefinitionTest : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public XPathDefinitionTest(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-    
-    [Fact]
-    public void ShouldCreateXPathDefinition()
+    [Test]
+    public async Task ShouldCreateXPathDefinition()
     {
         // Arrange
         const string path = "/root/element";
@@ -23,11 +17,11 @@ public class XPathDefinitionTest : DocumentsTestBase
         var definition = new XPathDefinition(path);
         
         // Assert
-        Assert.Equal(path, definition.Path);
+        await Assert.That(definition.Path).IsEqualTo(path);
     }
     
-    [Fact]
-    public void ShouldThrowArgumentExceptionWhenCreatingXPathDefinitionWithInvalidPath()
+    [Test]
+    public async Task ShouldThrowArgumentExceptionWhenCreatingXPathDefinitionWithInvalidPath()
     {
         // Arrange
         const string path = "::SomeInvalidPath";
@@ -36,7 +30,7 @@ public class XPathDefinitionTest : DocumentsTestBase
         Action act = () => new XPathDefinition(path);
         
         // Assert
-        var ex = Assert.Throws<ArgumentException>(act);
-        Assert.Equal($"The provided XPath '{path}' is invalid. (Parameter 'path')", ex.Message);
+        var ex = await Assert.That(act).ThrowsExactly<ArgumentException>();
+        await Assert.That(ex!.Message).IsEqualTo($"The provided XPath '{path}' is invalid. (Parameter 'path')");
     }
 }

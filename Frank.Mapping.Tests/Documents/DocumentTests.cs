@@ -1,19 +1,13 @@
 ﻿using Frank.Mapping.Documents;
 using Frank.Mapping.Documents.Models;
 using Frank.Mapping.Documents.Models.Enums;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public class DocumentTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public DocumentTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-
-    [Fact]
-    public void Test()
+    [Test]
+    public async Task Test()
     {
         var document = new Document(_xmlDocument);
         var documentMapping = new DocumentMapping<Person>(DocumentVariant.Xml, new List<PropertyMapping>()
@@ -30,12 +24,12 @@ public class DocumentTests : DocumentsTestBase
         
         document.MapTo<Person>(person, documentMapping);
 
-        Assert.Equal("John Doe", person.Name);
-        Assert.Equal(30, person.Age);
+        await Assert.That(person.Name).IsEqualTo("John Doe");
+        await Assert.That(person.Age).IsEqualTo(30);
     }
     
-    [Fact]
-    public void Test2()
+    [Test]
+    public async Task Test2()
     {
         var document = new Document(_jsonDocument);
         var documentMapping = new DocumentMapping<Person>(DocumentVariant.Json, new List<PropertyMapping>()
@@ -52,12 +46,12 @@ public class DocumentTests : DocumentsTestBase
 
         document.MapTo<Person>(person, documentMapping);
 
-        Assert.Equal("John Doe", person.Name);
-        Assert.Equal(30, person.Age);
+        await Assert.That(person.Name).IsEqualTo("John Doe");
+        await Assert.That(person.Age).IsEqualTo(30);
     }
     
-    [Fact]
-    public void Test3_ExtractValues()
+    [Test]
+    public async Task Test3_ExtractValues()
     {
         var document = new Document(_jsonDocument);
         var valuePaths = new List<ValuePath>()
@@ -68,8 +62,8 @@ public class DocumentTests : DocumentsTestBase
 
         var values = document.ExtractValues(valuePaths).ToList();
 
-        Assert.Equal("John Doe", values[0].Value);
-        Assert.Equal(30, Convert.ToInt32(values[1].Value));
+        await Assert.That(values[0].Value).IsEqualTo("John Doe");
+        await Assert.That(Convert.ToInt32(values[1].Value)).IsEqualTo(30);
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlValuePaths = new List<ValuePath>()
@@ -80,58 +74,58 @@ public class DocumentTests : DocumentsTestBase
         
         var xmlValues = xmlDocument.ExtractValues(xmlValuePaths).ToList();
         
-        Assert.Equal("John Doe", xmlValues[0].Value);
-        Assert.Equal(30, Convert.ToInt32(xmlValues[1].Value));
+        await Assert.That(xmlValues[0].Value).IsEqualTo("John Doe");
+        await Assert.That(Convert.ToInt32(xmlValues[1].Value)).IsEqualTo(30);
         
-        Assert.NotEqual("/Person/Name", values[0].Value);
-        Assert.NotEqual("/Person/age", values[1].Value);
+        await Assert.That(values[0].Value).IsNotEqualTo("/Person/Name");
+        await Assert.That(values[1].Value).IsNotEqualTo("/Person/age");
         
-        Assert.NotEqual("$.Name", xmlValues[0].Value);
-        Assert.NotEqual("$.age", xmlValues[1].Value);
+        await Assert.That(xmlValues[0].Value).IsNotEqualTo("$.Name");
+        await Assert.That(xmlValues[1].Value).IsNotEqualTo("$.age");
         
-        Assert.Throws<ArgumentException>(() => document.ExtractValues(new List<ValuePath>()
+        await Assert.That(() => document.ExtractValues(new List<ValuePath>()
         {
             new ValuePath(DocumentVariant.Xml, "/Person/Name", typeof(string)),
             new ValuePath(DocumentVariant.Xml, "/Person/age", typeof(int)),
-        }));
+        })).ThrowsExactly<ArgumentException>();
         
-        Assert.Throws<ArgumentException>(() => document.ExtractValues(new List<ValuePath>()
+        await Assert.That(() => document.ExtractValues(new List<ValuePath>()
         {
             new ValuePath(DocumentVariant.Json, "$.Name", typeof(string)),
             new ValuePath(DocumentVariant.Xml, "/Person/age", typeof(int)),
-        }));
+        })).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void Test4_GetPaths()
+    [Test]
+    public async Task Test4_GetPaths()
     {
         var jsonDocument = new Document(_jsonDocument);
         var jsonPaths = jsonDocument.GetPaths().ToList();
 
-        Assert.Contains("$.Name", jsonPaths);
-        Assert.Contains("$.age", jsonPaths);
-        Assert.Contains("$.Address.City", jsonPaths);
+        await Assert.That(jsonPaths).Contains("$.Name");
+        await Assert.That(jsonPaths).Contains("$.age");
+        await Assert.That(jsonPaths).Contains("$.Address.City");
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlPaths = xmlDocument.GetPaths().ToList();
         
-        Assert.Contains("/Person/Name", xmlPaths);
-        Assert.Contains("/Person/age", xmlPaths);
-        Assert.Contains("/Person/Address/City", xmlPaths);
+        await Assert.That(xmlPaths).Contains("/Person/Name");
+        await Assert.That(xmlPaths).Contains("/Person/age");
+        await Assert.That(xmlPaths).Contains("/Person/Address/City");
         
-        Assert.DoesNotContain("/Person/Name", jsonPaths);
-        Assert.DoesNotContain("/Person/age", jsonPaths);
-        Assert.DoesNotContain("/Person/Address/City", jsonPaths);
+        await Assert.That(jsonPaths).DoesNotContain("/Person/Name");
+        await Assert.That(jsonPaths).DoesNotContain("/Person/age");
+        await Assert.That(jsonPaths).DoesNotContain("/Person/Address/City");
         
-        Assert.DoesNotContain("$.Name", xmlPaths);
-        Assert.DoesNotContain("$.age", xmlPaths);
-        Assert.DoesNotContain("$.Address.City", xmlPaths);
+        await Assert.That(xmlPaths).DoesNotContain("$.Name");
+        await Assert.That(xmlPaths).DoesNotContain("$.age");
+        await Assert.That(xmlPaths).DoesNotContain("$.Address.City");
         
-        Assert.Throws<ArgumentException>(() => new Document("Invalid document"));
+        await Assert.That(() => new Document("Invalid document")).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void Test5_MapTo()
+    [Test]
+    public async Task Test5_MapTo()
     {
         var document = new Document(_jsonDocument);
         var person = new Person();
@@ -143,8 +137,8 @@ public class DocumentTests : DocumentsTestBase
 
         document.MapTo(person, documentMapping);
 
-        Assert.Equal("John Doe", person.Name);
-        Assert.Equal(30, person.Age);
+        await Assert.That(person.Name).IsEqualTo("John Doe");
+        await Assert.That(person.Age).IsEqualTo(30);
         
         var xmlDocument = new Document(_xmlDocument);
         var xmlPerson = new Person();
@@ -156,12 +150,12 @@ public class DocumentTests : DocumentsTestBase
         
         xmlDocument.MapTo(xmlPerson, xmlDocumentMapping);
         
-        Assert.Equal("John Doe", xmlPerson.Name);
-        Assert.Equal(30, xmlPerson.Age);
+        await Assert.That(xmlPerson.Name).IsEqualTo("John Doe");
+        await Assert.That(xmlPerson.Age).IsEqualTo(30);
     }
     
-    [Fact]
-    public void Test6_MapTo()
+    [Test]
+    public async Task Test6_MapTo()
     {
         var document = new Document(_jsonDocument);
         var documentMapping = new DocumentMapping<Person>(DocumentVariant.Json, new List<PropertyMapping>()
@@ -172,12 +166,12 @@ public class DocumentTests : DocumentsTestBase
 
         var person = document.MapTo<Person>(documentMapping);
 
-        Assert.Equal("John Doe", person.Name);
-        Assert.Equal(30, person.Age);
+        await Assert.That(person.Name).IsEqualTo("John Doe");
+        await Assert.That(person.Age).IsEqualTo(30);
     }
     
-    [Fact]
-    public void Test7_MapTo()
+    [Test]
+    public async Task Test7_MapTo()
     {
         var document = new Document(_jsonDocument);
         var documentMapping = new DocumentMapping<Person>(DocumentVariant.Json, new List<PropertyMapping>()
@@ -188,7 +182,7 @@ public class DocumentTests : DocumentsTestBase
 
         var person = document.MapTo<Person>(documentMapping);
 
-        Assert.Equal("John Doe", person.Name);
-        Assert.Equal(30, person.Age);
+        await Assert.That(person.Name).IsEqualTo("John Doe");
+        await Assert.That(person.Age).IsEqualTo(30);
     }
 }

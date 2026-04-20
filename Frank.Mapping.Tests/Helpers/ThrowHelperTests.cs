@@ -1,63 +1,55 @@
 ﻿using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Helpers;
 
 [TestSubject(typeof(ThrowHelper))]
 public class ThrowHelperTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-
-    public ThrowHelperTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
-    public void ShouldThrowException()
+    [Test]
+    public async Task ShouldThrowException()
     {
         // Arrange
         var message = "";
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message)));
+        await Assert.That(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message))).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void ShouldThrowException_WhenMessageIsNull()
+    [Test]
+    public async Task ShouldThrowException_WhenMessageIsNull()
     {
         // Arrange
         string? message = null;
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message)));
+        await Assert.That(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message))).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void ShouldThrowException_WhenMessageIsEmpty()
+    [Test]
+    public async Task ShouldThrowException_WhenMessageIsEmpty()
     {
         // Arrange
         var message = "";
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message)));
+        await Assert.That(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message))).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void ShouldThrowException_WhenMessageIsWhiteSpace()
+    [Test]
+    public async Task ShouldThrowException_WhenMessageIsWhiteSpace()
     {
         // Arrange
         var message = " ";
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message)));
+        await Assert.That(() => ThrowHelper.ThrowIfNullOrWhiteSpace(message, nameof(message))).ThrowsExactly<ArgumentException>();
     }
     
-    [Fact]
-    public void ShouldThrowException_WhenThereIsExceptions()
+    [Test]
+    public async Task ShouldThrowException_WhenThereIsExceptions()
     {
         // Act & Assert
-        Assert.Throws<AggregateException>(() => ThrowHelper.ThrowAggregatedExceptionIfAny(new Exception()));
+        await Assert.That(() => ThrowHelper.ThrowAggregatedExceptionIfAny(new Exception())).ThrowsExactly<AggregateException>();
     }
 }

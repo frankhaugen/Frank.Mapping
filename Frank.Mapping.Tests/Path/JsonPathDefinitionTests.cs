@@ -1,20 +1,14 @@
 ﻿using Frank.Mapping.Documents.Path;
 using Frank.Mapping.Tests.Documents;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Path;
 
 [TestSubject(typeof(JsonPathDefinition))]
 public class JsonPathDefinitionTests : DocumentsTestBase
 {
-    /// <inheritdoc />
-    public JsonPathDefinitionTests(ITestOutputHelper outputHelper) : base(outputHelper)
-    {
-    }
-    
-    [Fact]
-    public void ShouldCreateJsonPathDefinition()
+    [Test]
+    public async Task ShouldCreateJsonPathDefinition()
     {
         // Arrange
         const string path = "$.root.element";
@@ -23,11 +17,11 @@ public class JsonPathDefinitionTests : DocumentsTestBase
         var definition = new JsonPathDefinition(path);
         
         // Assert
-        Assert.Equal(path, definition.Path);
+        await Assert.That(definition.Path).IsEqualTo(path);
     }
     
-    [Fact]
-    public void ShouldThrowArgumentExceptionWhenCreatingJsonPathDefinitionWithInvalidPath()
+    [Test]
+    public async Task ShouldThrowArgumentExceptionWhenCreatingJsonPathDefinitionWithInvalidPath()
     {
         // Arrange
         const string path = "::SomeInvalidPath";
@@ -36,7 +30,7 @@ public class JsonPathDefinitionTests : DocumentsTestBase
         Action act = () => new JsonPathDefinition(path);
         
         // Assert
-        var ex = Assert.Throws<ArgumentException>(act);
-        Assert.Equal($"The provided JSON path '{path}' is invalid. (Parameter 'path')", ex.Message);
+        var ex = await Assert.That(act).ThrowsExactly<ArgumentException>();
+        await Assert.That(ex!.Message).IsEqualTo($"The provided JSON path '{path}' is invalid. (Parameter 'path')");
     }
 }

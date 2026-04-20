@@ -1,21 +1,13 @@
 ﻿using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Helpers;
 
 [TestSubject(typeof(XPathHelper))]
 public class XPathHelperTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-    
-    public XPathHelperTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
-    public void ShouldGetXPath()
+    [Test]
+    public async Task ShouldGetXPath()
     {
         // Arrange
         var xml = 
@@ -37,8 +29,8 @@ public class XPathHelperTests
         var result = XPathHelper.GetPaths(xml).ToArray();
         
         // Assert
-        Assert.NotNull(result);
-        _outputHelper.WriteLine($"Test Result:");
-        _outputHelper.WriteLine(result);
+        await Assert.That(result).IsNotNull();
+        Console.WriteLine($"Test Result:");
+        Console.WriteLine(string.Join(Environment.NewLine, result));
     }
 }

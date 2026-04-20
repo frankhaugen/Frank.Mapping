@@ -1,17 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Documents;
 
 public abstract class DocumentsTestBase
 {
-    public readonly ITestOutputHelper _outputHelper;
-    
-    public DocumentsTestBase(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
     public static string _jsonDocument = 
         """
         {

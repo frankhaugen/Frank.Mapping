@@ -1,22 +1,14 @@
 ﻿using System.Reflection;
 using Frank.Mapping.Documents.Path;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Path;
 
 [TestSubject(typeof(PathDefinition))]
 public class PathDefinitionTests
 {
-    private readonly ITestOutputHelper _outputHelper;
-
-    public PathDefinitionTests(ITestOutputHelper outputHelper)
-    {
-        _outputHelper = outputHelper;
-    }
-    
-    [Fact]
-    public void Create_WithValidPath_ReturnsPathDefinition()
+    [Test]
+    public async Task Create_WithValidPath_ReturnsPathDefinition()
     {
         // Arrange
         var path = "path";
@@ -25,12 +17,12 @@ public class PathDefinitionTests
         var result = PathDefinition.Create<MyPathDefinition>(path);
         
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(path, result.Path);
+        await Assert.That(result).IsNotNull();
+        await Assert.That(result!.Path).IsEqualTo(path);
     }
     
-    [Fact]
-    public void Create_WithInvalidPath_ThrowsArgumentException()
+    [Test]
+    public async Task Create_WithInvalidPath_ThrowsArgumentException()
     {
         // Arrange
         var path = string.Empty;
@@ -39,11 +31,11 @@ public class PathDefinitionTests
         void Act() => PathDefinition.Create<MyPathDefinition>(path);
         
         // Assert
-        Assert.Throws<TargetInvocationException>(Act);
+        await Assert.That(Act).ThrowsExactly<TargetInvocationException>();
     }
     
-    [Fact]
-    public void ToString_ReturnsPath()
+    [Test]
+    public async Task ToString_ReturnsPath()
     {
         // Arrange
         var path = "#";
@@ -53,26 +45,26 @@ public class PathDefinitionTests
         var result = pathDefinition?.ToString();
         
         // Assert
-        _outputHelper.WriteLine(result);
-        Assert.Equal("""MyPathDefinition { Path = # }""", result);
+        Console.WriteLine(result);
+        await Assert.That(result).IsEqualTo("MyPathDefinition { Path = # }");
     }
     
-    [Fact]
-    public void ImplicitOperator_ReturnsPath()
+    [Test]
+    public async Task ImplicitOperator_ReturnsPath()
     {
         // Arrange
         var path = "path";
         var pathDefinition = PathDefinition.Create<MyPathDefinition>(path);
         
         // Act
-        string result = pathDefinition;
+        string result = pathDefinition!;
         
         // Assert
-        Assert.Equal(path, result);
+        await Assert.That(result).IsEqualTo(path);
     }
     
-    [Fact]
-    public void ImplicitOperator_WithNotNull_ReturnsPath()
+    [Test]
+    public async Task ImplicitOperator_WithNotNull_ReturnsPath()
     {
         // Arrange
         var path = "MyPathDefinition";
@@ -82,7 +74,7 @@ public class PathDefinitionTests
         string? result = pathDefinition;
         
         // Assert
-        Assert.Equal(path, result);
+        await Assert.That(result).IsEqualTo(path);
     }
     
     record MyPathDefinition : PathDefinition

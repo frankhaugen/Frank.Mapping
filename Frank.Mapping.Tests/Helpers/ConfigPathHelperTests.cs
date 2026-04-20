@@ -1,22 +1,14 @@
 ﻿using System.Text;
 using Frank.Mapping.Documents.Helpers;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
 
 namespace Frank.Mapping.Tests.Helpers;
 
 [TestSubject(typeof(ConfigPathHelper))]
 public class ConfigPathHelperTests
 {
-    private readonly ITestOutputHelper _output;
-
-    public ConfigPathHelperTests(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
-    [Fact]
-    public void ShouldGetConfigPath()
+    [Test]
+    public async Task ShouldGetConfigPath()
     {
         // Arrange
         var configJsonContent = """
@@ -29,18 +21,18 @@ public class ConfigPathHelperTests
         var result = ConfigPathHelper.GetPaths(configJsonContent).ToArray();
         
         // Assert
-        Assert.False(string.IsNullOrEmpty(result.FirstOrDefault()));
-        _output.WriteLine($"Test Result:");
-        _output.WriteLine(result);
+        await Assert.That(result.FirstOrDefault()).IsNotNull();
+        Console.WriteLine($"Test Result:");
+        Console.WriteLine(string.Join(Environment.NewLine, result));
     }
 
-    [Fact]
-    public void ShouldThrowException_WhenValueIsNotJson()
+    [Test]
+    public async Task ShouldThrowException_WhenValueIsNotJson()
     {
         // Arrange
         var configXmlContent = "<xml></xml>";
         
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => ConfigPathHelper.GetPaths(configXmlContent));
+        await Assert.That(() => ConfigPathHelper.GetPaths(configXmlContent)).ThrowsExactly<ArgumentException>();
     }
 }
