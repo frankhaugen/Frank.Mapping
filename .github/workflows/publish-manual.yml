@@ -1,5 +1,4 @@
-name: Release Workflow
-
+name: Publish: NuGet (manual)
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +11,7 @@ permissions:
 
 jobs:
   publish:
-    name: Publish to NuGet
+    name: Publish NuGet
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
