@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -68,11 +67,5 @@ jobs:
       - name: Pack
         run: dotnet pack Frank.Mapping.slnx --configuration Release --no-build --output ./nupkgs -p:Version=${{ steps.release.outputs.version }}
 
-      - name: NuGet login
-        uses: NuGet/login@v1
-        id: nuget-auth
-        with:
-          user: ${{ github.repository_owner }}
-
       - name: Push to NuGet.org
-        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.nuget-auth.outputs.NUGET_API_KEY }}" --skip-duplicate
+        run: dotnet nuget push "./nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ secrets.NUGETKEY }}" --skip-duplicate
