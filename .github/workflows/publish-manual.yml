@@ -1,10 +1,6 @@
 name: Release Workflow
 
 on:
-  # Fires when a release is manually created from the GitHub UI
-  release:
-    types: [published]
-  # Manual re-publish with explicit version
   workflow_dispatch:
     inputs:
       version:
